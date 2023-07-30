@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-export default function ForgotPassword1() {
+export default function ForgotPassword3() {
   return (
     <View>
-      <Text style={{color:'#000'}}>forgotPassword1</Text>
+      <Text style={{color:'#000'}}>ForgotPassword3</Text>
     </View>
   )
 }
