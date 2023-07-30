@@ -19,7 +19,7 @@ export default function Home() {
     </View>
     <View style={styles.weltextcon}>
     <Text style={styles.weltext}>Welcome</Text>
-    <Text style={styles.weltextbottom}>Join with us & Donate</Text>
+    <Text style={styles.weltextbottom}>Jon with us & Donate</Text>
     </View>
 
    

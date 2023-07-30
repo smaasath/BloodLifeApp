@@ -1,10 +1,23 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import React from 'react'
+import { useNavigation } from '@react-navigation/native';
 
-export default function dashboard() {
+export default function Dashboard() {
+
+
+  const navigation = useNavigation();
+  const logout = () =>{
+    navigation.reset({
+        index: 0,
+        routes: [{ name: 'Home' }],
+      });
+    
+  }
+
+
   return (
     <View>
-      <Text>dashboard</Text>
+      <TouchableOpacity onPress={logout}><Text style={{ color: '#3498DB', textAlign: 'right', }}>logout</Text></TouchableOpacity>
     </View>
   )
 }

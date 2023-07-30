@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 
 
@@ -22,12 +23,36 @@ export default function Login() {
     );
 
     if (matchedCredentials) {
-      alert('Login successful!');
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Dashboard' }],
+      });
       // Add navigation logic here to navigate to the next screen on successful login
     } else {
       alert('Invalid credentials. Please try again.');
     }
   };
+
+
+  const navigation = useNavigation();
+
+  const navForgotPass1 = () => {
+    navigation.navigate('forgotPassword1')
+
+  }
+
+  const [isFocused, setIsFocused] = useState(false);
+
+  const handleFocus = () => {
+    setIsFocused(true);
+  };
+
+  const handleBlur = () => {
+    setIsFocused(false);
+  };
+
+  const inputBorderColor = isFocused ? '#2E86C1' : 'gray';
+
 
   return (
 
@@ -42,54 +67,53 @@ export default function Login() {
         <View style={styles.row4}>
           <View style={styles.rowcon5}>
             <View style={styles.row4}>
-              <View style={styles.rowcon4}>
+              <View style={styles.rowcon9}>
                 <View style={styles.row4}>
-                  <View style={styles.rowcon4}>
+                  <View style={styles.rowcon8}>
                     <Text style={{ color: '#000' }}>User Name</Text>
-                  </View>
-                </View>
-                <View style={styles.row4}>
-                  <View style={styles.rowcon4}>
+                    <View style={styles.break} />
                     <TextInput
-                      style={styles.input}
+                      style={[styles.input,{ borderColor: inputBorderColor }]}
                       placeholder="User Name"
+                      placeholderTextColor="#000"
                       value={username}
                       onChangeText={(text) => setUsername(text)}
+                      onFocus={handleFocus}
+                      onBlur={handleBlur}
                     />
-                  </View>
-                </View>
-              </View>
-            </View>
-
-            <View style={styles.row4}>
-              <View style={styles.rowcon4}>
-                <View style={styles.row4}>
-                  <View style={styles.rowcon4}>
+                    <View style={styles.breakElement} />
                     <Text style={{ color: '#000' }}>Password</Text>
-                  </View>
-                </View>
-                <View style={styles.row4}>
-                  <View style={styles.rowcon4}>
+                    <View style={styles.break} />
                     <TextInput
-                      style={styles.input}
+                      style={[styles.input,{ borderColor: inputBorderColor }]}
                       secureTextEntry
                       placeholder="Password"
+                      placeholderTextColor="#000"
                       value={password}
                       onChangeText={(text) => setPassword(text)}
+                      onFocus={handleFocus}
+                      onBlur={handleBlur}
                     />
+                    <View style={styles.break} />
+                    <View style={{ width: '95%' }}>
+                      <TouchableOpacity onPress={navForgotPass1}><Text style={{ color: '#3498DB', textAlign: 'right', }}>Forgot Password?</Text></TouchableOpacity>
+                    </View>
+
+                    <View style={styles.breakElement} />
+                    <View style={styles.buttonelement}>
+                      <TouchableOpacity onPress={handleLogin} style={styles.logbutton} ><Text>Login</Text></TouchableOpacity>
+                    </View>
                   </View>
                 </View>
               </View>
             </View>
 
 
-            <View style={styles.row4}>
-              <View style={styles.rowcon4}>
-                <TouchableOpacity onPress={handleLogin} style={styles.logbutton} ><Text>Login</Text></TouchableOpacity>
-              </View>
-            </View>
 
-            <View style={styles.row4}>
+
+
+
+            <View style={styles.rowimage}>
               <View style={styles.rowcon4}>
                 <Image source={require('../../assets/loginbottumimage.png')} style={{ height: 178, width: '100%', marginBottom: -150, }}></Image>
               </View>
@@ -123,6 +147,8 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     backgroundColor: "#BD1616",
+
+
   },
 
   row4: {
@@ -134,10 +160,48 @@ const styles = StyleSheet.create({
 
   },
 
+  rowimage: {
+    backgroundColor: "#fff",
+    flex: 1,
+    flexDirection: "row",
+
+    zIndex: -1,
+
+
+  },
+
+  rowbut: {
+    backgroundColor: "#fff",
+    flex: 1,
+    flexDirection: "row",
+    borderTopRightRadius: 40,
+    borderTopLeftRadius: 40,
+
+
+
+
+  },
+
   rowcon4: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+
+  },
+
+  rowcon9: {
+    flex: 1,
+    alignItems: "flex-start",
+    justifyContent: "center",
+
+  },
+
+  rowcon8: {
+    flex: 1,
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
+    marginLeft: 20,
+    marginTop: 50,
 
   },
 
@@ -146,13 +210,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
 
+
   },
 
   input: {
-    width: '80%',
-    height: 40,
+    width: '95%',
+    height: 45,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: 'gray',
     borderRadius: 15,
     marginBottom: 10,
     paddingLeft: 10,
@@ -164,11 +229,28 @@ const styles = StyleSheet.create({
     backgroundColor: '#BD1616',
     width: 120,
     height: 38,
-    borderRadius:20,
+    borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
 
 
+
+  },
+
+
+  break: {
+    height: 10,
+  },
+
+  breakElement: {
+    height: 30,
+  },
+
+  buttonelement: {
+
+    alignItems: "center",
+    width: '100%',
+    zIndex: 10,
   },
 
 });
