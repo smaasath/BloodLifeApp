@@ -14,6 +14,7 @@ import Dashboard from './src/pages/dashboard';
 import ForgotPassword1 from './src/pages/ForgotPassword1';
 import ForgotPassword2 from './src/pages/ForgotPassword2';
 import ForgotPassword3 from './src/pages/ForgotPassword3';
+import ForgotPassword4 from './src/pages/ForgotPassword4';
 
 
 
@@ -33,6 +34,7 @@ function App() {
         <Stack.Screen name="Dashboard" component={Dashboard} options={{ headerShown: false }} />
         <Stack.Screen name="ForgotPassword2" component={ForgotPassword2} options={{ headerShown: false }} />
         <Stack.Screen name="ForgotPassword3" component={ForgotPassword3} options={{ headerShown: false }} />
+        <Stack.Screen name="ForgotPassword4" component={ForgotPassword4} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

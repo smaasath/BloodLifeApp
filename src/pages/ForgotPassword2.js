@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
 
     },
 
-    forgetTextCon: {},
+   
     forgetTextnormal: {
         color: '#8391A1',
         fontSize: 16,
