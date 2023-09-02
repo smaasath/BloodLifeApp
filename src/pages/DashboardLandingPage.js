@@ -108,7 +108,7 @@ export default function DashboardLandingPage() {
 
     return (
         <>
-            <DashboardStructure children1={<Children1 date={"2023-03-23"} />} children2={<Children2 />}></DashboardStructure>
+            <DashboardStructure children1={<Children1 date={"2023-05-23"} />} children2={<Children2 />}></DashboardStructure>
         </>
     )
 }

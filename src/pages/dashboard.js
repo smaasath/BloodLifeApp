@@ -61,7 +61,9 @@ export default function Dashboard() {
         <Tab.Screen name="DashboardProfile" component={DashboardProfile} options={{
           headerShown: false,
           tabBarIcon: ({ color, size, focused }) => (
-            <Image source={require('../../assets/account-box.png')} style={{  height: focused ? 40 : 30, width: focused ? 40 : 30, tintColor: focused ? '#FF6565' : 'gray', }}></Image>
+            <View style={{backgroundColor:focused ? '#FF6565' : 'gray', height: focused ? 45 : 35, width: focused ? 45 : 35, alignItems:'center' ,justifyContent:'center' ,borderRadius:90, }}>
+            <Image source={require('../../assets/sample-profile.jpg')} style={{  height: focused ? 40 : 30, width: focused ? 40 : 30, borderRadius:90}}></Image>
+            </View> 
           ),
           tabBarLabel: () => null, 
         }} />

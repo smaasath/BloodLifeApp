@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import LinearGradient from 'react-native-linear-gradient'
+
 
 const setcolorbystatus = (status) => {
     switch (status) {
@@ -18,7 +18,7 @@ const setcolorbystatus = (status) => {
 
 
 
-export default function BloodBankRequest({ status, BloodType, BloodQuntity,RequestID,RequestDate,RequestHospital }) {
+export default function BloodBankRequest({ status, BloodQuntity, RequestID, RequestDate, RequestHospital }) {
 
     const TextColors = setcolorbystatus(status);
 
@@ -29,19 +29,17 @@ export default function BloodBankRequest({ status, BloodType, BloodQuntity,Reque
             <TouchableOpacity>
                 <View style={styles.con}>
                     <View style={{ flexDirection: 'row', }}>
-                        <View style={{ flex: 1, height: 70, justifyContent: 'center', alignItems: 'center', }}>
-                            <Text style={{ color: TextColors, fontWeight: 'bold', fontSize: 40, }}>{BloodType}</Text>
+                        <View style={{ flex: 3, height: 50, justifyContent: 'center', alignItems: 'flex-start', }}>
+                            <Text style={{ color: TextColors, fontWeight: 'bold', fontSize: 30, }}>{RequestID}</Text>
                         </View>
-                        <View style={{ flex: 1, height: 70, justifyContent: 'center', alignItems: 'center', }}>
+                        <View style={{ flex: 1, height: 50, justifyContent: 'center', alignItems: 'center', }}>
                             <Text style={{ color: TextColors, fontWeight: 'bold', fontSize: 20, }}>{BloodQuntity}</Text>
                         </View>
                     </View>
 
-                    <View style={{ flexDirection: 'row', flex: 1,justifyContent: 'flex-start', alignItems: 'center', }}>
-                    <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 15, }}>{RequestID}</Text>
-                    </View>
+                  
                     <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'flex-start', alignItems: 'center', }}>
-                    <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 8, }}>{RequestHospital}</Text>
+                        <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 8, }}>{RequestHospital}</Text>
                     </View>
                     <View style={{ flexDirection: 'row', flex: 1, height: 50, justifyContent: 'center', alignItems: 'center', }}>
                         <View style={{ flex: 1, height: 70, justifyContent: 'center', alignItems: '', }}>
@@ -67,7 +65,7 @@ const styles = StyleSheet.create({
 
         margin: 10,
         padding: 10,
-        height: 170,
+        height: 130,
         width: 150,
         borderRadius: 10,
         backgroundColor: '#fff',
