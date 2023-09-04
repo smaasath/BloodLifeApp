@@ -2,6 +2,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View, } from 'react-native'
 import React from 'react'
 
 
+
 const setcolorbystatus = (status) => {
     switch (status) {
         case "Active":

@@ -1,5 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, {useState} from 'react'
+import RequestModel from './RequestModel';
+
 
 
 const setcolorbystatus = (status) => {
@@ -20,24 +22,35 @@ const setcolorbystatus = (status) => {
 
 export default function BloodBankRequest({ status, BloodQuntity, RequestID, RequestDate, RequestHospital }) {
 
+    const [isModalVisible, setModalVisible] = useState(false);
+
+    const toggleModal = () => {
+        setModalVisible(!isModalVisible);
+    };
+
     const TextColors = setcolorbystatus(status);
 
     return (
 
 
         <>
-            <TouchableOpacity>
+            <RequestModel isModalVisible={isModalVisible} toggleModal={toggleModal}>
+
+            </RequestModel>
+            <TouchableOpacity
+            onPress={toggleModal}
+            >
                 <View style={styles.con}>
                     <View style={{ flexDirection: 'row', }}>
                         <View style={{ flex: 3, height: 50, justifyContent: 'center', alignItems: 'flex-start', }}>
                             <Text style={{ color: TextColors, fontWeight: 'bold', fontSize: 30, }}>{RequestID}</Text>
                         </View>
                         <View style={{ flex: 1, height: 50, justifyContent: 'center', alignItems: 'center', }}>
-                            <Text style={{ color: TextColors, fontWeight: 'bold', fontSize: 20, }}>{BloodQuntity}</Text>
+                            <Text style={{ color: TextColors, fontWeight: 'bold', fontSize: 11, }}>{BloodQuntity}</Text>
                         </View>
                     </View>
 
-                  
+
                     <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'flex-start', alignItems: 'center', }}>
                         <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 8, }}>{RequestHospital}</Text>
                     </View>

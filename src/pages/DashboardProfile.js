@@ -1,7 +1,8 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity,Switch,isEnabled,toggleSwitch,} from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity, Switch, isEnabled, toggleSwitch, } from 'react-native'
 import React, { useState } from 'react';
 import DashboardStructure from '../components/DashboardStructure'
 import { useNavigation } from '@react-navigation/native';
+
 
 
 
@@ -20,6 +21,14 @@ function Children1() {
 function Children2() {
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+  const navigation = useNavigation();
+  const logout = () => {
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Home' }],
+    });
+
+  }
 
   return (
     <>
@@ -28,29 +37,39 @@ function Children2() {
           <Text style={{ fontSize: 25, fontWeight: 'bold', color: '#FF6565', padding: 10, }}>
             Profile Details
           </Text>
-          <TouchableOpacity><Image source={require('../../assets/account-edit.png')} style={{ height: 50, width: 50, borderRadius: 90, tintColor: '#FF6565', }}></Image></TouchableOpacity>
+        </View>
+
+        <View style={{ paddingLeft: 25, }}>
+          <Text style={styles.contentText}>Availability</Text>
         </View>
 
         <View style={styles.bigCon}>
-        <View style={{ flexDirection: 'row', }}>
+          <View style={{ flexDirection: 'row', }}>
             <View style={styles.headingCon}>
               <Text style={styles.headingText}>Availability</Text>
             </View>
             <View style={styles.contentCon}>
-            <View style={{...styles.container, paddingLeft:50,}}>
-      <Switch
-        trackColor={{false: '#767577', true: '#96ffad'}}
-        thumbColor={isEnabled ? '#11f542' : '#f4f3f4'}
-        ios_backgroundColor="#3e3e3e"
-        onValueChange={toggleSwitch}
-        value={isEnabled}
-      />
-    </View>
+              <View style={{ ...styles.container, paddingLeft: 50, }}>
+                <Switch
+                  trackColor={{ false: '#767577', true: '#96ffad' }}
+                  thumbColor={isEnabled ? '#11f542' : '#f4f3f4'}
+                  ios_backgroundColor="#3e3e3e"
+                  onValueChange={toggleSwitch}
+                  value={isEnabled}
+                />
+              </View>
             </View>
 
           </View>
         </View>
+        <View style={{ paddingLeft: 25, }}>
+          <Text style={styles.contentText}>Details</Text>
+        </View>
         <View style={styles.bigCon}>
+          <View style={{ alignItems: 'flex-end' }}>
+            <TouchableOpacity><Image source={require('../../assets/account-edit.png')} style={{ height: 30, width: 30, borderRadius: 90, }}></Image></TouchableOpacity>
+          </View>
+
           <View style={{ flexDirection: 'row', }}>
             <View style={styles.headingCon}>
               <Text style={styles.headingText}>Name  </Text>
@@ -111,13 +130,24 @@ function Children2() {
           </View>
         </View>
 
+        <View style={{ paddingLeft: 25, }}>
+          <Text style={styles.contentText}>Logout</Text>
+        </View>
+
         <View style={styles.bigCon}>
-        <View style={{ flexDirection: 'row', }}>
+          <View style={{ flexDirection: 'row', }}>
             <View style={styles.headingCon}>
               <Text style={styles.headingText}>Logout</Text>
             </View>
-            <View style={styles.contentCon}>
-            <TouchableOpacity><Image source={require('../../assets/power.png')} style={{ height: 50, width: 50, borderRadius: 90, tintColor: '#FF6565', }}></Image></TouchableOpacity>
+            <View style={{ ...styles.contentCon, alignItems: 'flex-end', marginRight: 50, }}>
+
+              <TouchableOpacity
+                onPress={logout}
+              >
+                <Image source={require('../../assets/logout.png')} style={{ height: 40, width: 40, borderRadius: 90, }}>
+                </Image>
+              </TouchableOpacity>
+
             </View>
 
           </View>
@@ -131,14 +161,7 @@ function Children2() {
 }
 
 export default function DashboardProfile() {
-  const navigation = useNavigation();
-  const logout = () => {
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Home' }],
-    });
 
-  }
   return (
     <>
       <DashboardStructure children1={<Children1 />} children2={<Children2 />}></DashboardStructure>

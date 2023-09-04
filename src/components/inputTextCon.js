@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View ,TextInput,} from 'react-native'
 import React, { useState } from 'react';
 
+
 const InputTextCon = ({ onChangeText, placeholder,value,password}) => {
 
   const [isFocused, setIsFocused] = useState(false);

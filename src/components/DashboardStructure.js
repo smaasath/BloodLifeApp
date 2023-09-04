@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity } from 'rea
 import React from 'react'
 import { useNavigation } from '@react-navigation/native';
 
+
 export default function DashboardStructure(props) {
     const navigation = useNavigation();
 

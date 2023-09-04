@@ -84,7 +84,7 @@ function Children1() {
   return (
     <View style={{ margin: 30, flexDirection:'row', justifyContent:'space-between' }}>
       <SelectDropdown
-        data={["All", "Completed", "Active"]}
+        data={["All","my", "Completed", "Active"]}
         buttonStyle={{ borderRadius: 10, width: '40%', height: 40 }}
         defaultButtonText={["Status"]}
         buttonTextStyle={{ fontSize: 14, }}

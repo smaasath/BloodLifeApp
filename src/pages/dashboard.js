@@ -13,6 +13,7 @@ import IMAGEDASHBOARD from '../../assets/view-dashboard.png';
 
 
 
+
 export default function Dashboard() {
 
   const Tab = createBottomTabNavigator();

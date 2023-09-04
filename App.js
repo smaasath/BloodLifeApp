@@ -24,6 +24,7 @@ import QrMain from './src/pages/QrMain';
 
 
 
+
 const Stack = createNativeStackNavigator();
 
 function App() {

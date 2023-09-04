@@ -8,6 +8,7 @@ import BloodBankRequest from '../components/BloodBankRequest';
 
 
 
+
 function subtractLocalDateFromEnteredDate(enteredDateString) {
     // Convert the entered date string to a Date object
     const enteredDate = new Date(enteredDateString);
@@ -87,10 +88,10 @@ function Children2() {
                 </View>
 
                 <View style={styles.childrenconReq}>
-                    <BloodBankRequest status={"Normal"} BloodType='B+' BloodQuntity='2L' RequestID='B001' RequestDate='2023-02-02' RequestHospital='Kalmunai Base Hospital'></BloodBankRequest>
-                    <BloodBankRequest status={"Emergency"}  BloodType='B+' BloodQuntity='2L' RequestID='B001' RequestDate='2023-02-02' RequestHospital='Kalmunai Base Hospital'></BloodBankRequest>
-                    <BloodBankRequest status={"Urgent"}  BloodType='B+' BloodQuntity='2L' RequestID='B001' RequestDate='2023-02-02' RequestHospital='Kalmunai Base Hospital'></BloodBankRequest>
-                    <BloodBankRequest status={"completed"}  BloodType='B+' BloodQuntity='2L' RequestID='B001' RequestDate='2023-02-02' RequestHospital='Kalmunai Base Hospital'></BloodBankRequest>
+                    <BloodBankRequest status={"Normal"} BloodType='B+' BloodQuntity='150ml' RequestID='B001' RequestDate='2023-02-02' RequestHospital='Kalmunai Base Hospital'></BloodBankRequest>
+                    <BloodBankRequest status={"Emergency"}  BloodType='B+' BloodQuntity='100ml' RequestID='B001' RequestDate='2023-02-02' RequestHospital='Kalmunai Base Hospital'></BloodBankRequest>
+                    <BloodBankRequest status={"Urgent"}  BloodType='B+' BloodQuntity='250ml' RequestID='B001' RequestDate='2023-02-02' RequestHospital='Kalmunai Base Hospital'></BloodBankRequest>
+                    <BloodBankRequest status={"completed"}  BloodType='B+' BloodQuntity='50ml' RequestID='B001' RequestDate='2023-02-02' RequestHospital='Kalmunai Base Hospital'></BloodBankRequest>
                 </View>
 
 
@@ -108,7 +109,7 @@ export default function DashboardLandingPage() {
 
     return (
         <>
-            <DashboardStructure children1={<Children1 date={"2023-05-23"} />} children2={<Children2 />}></DashboardStructure>
+            <DashboardStructure children1={<Children1 date={"2023-09-23"} />} children2={<Children2 />}></DashboardStructure>
         </>
     )
 }
