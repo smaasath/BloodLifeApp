@@ -18,14 +18,8 @@ export default function Dashboard() {
 
   const Tab = createBottomTabNavigator();
 
-  const navigation = useNavigation();
-  const logout = () => {
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Home' }],
-    });
+  
 
-  }
 
 
   return (

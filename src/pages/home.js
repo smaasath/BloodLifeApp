@@ -1,6 +1,7 @@
-import * as React from 'react';
+import React, { useState,useEffect } from 'react';
 import { View, Text, StyleSheet,TouchableOpacity, Image, } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import EncryptedStorage from 'react-native-encrypted-storage';
 
 
 
@@ -9,9 +10,43 @@ export default function Home() {
 
   const navigation = useNavigation();
 
-  const onpresslogin = () =>{
-    navigation.navigate('Login')
-  }
+
+  const navToLogin = () => {
+    navigation.navigate('Login');
+  };
+
+  const navToDashboard = () => {
+    navigation.navigate('Dashboard');
+  };
+
+  useEffect(() => {
+    async function retrieveUserSession() {
+      try {
+        const session = await EncryptedStorage.getItem("user_session");
+
+        if (session !== undefined) {
+
+          const parsedSession = JSON.parse(session);
+          if (parsedSession.donorId !== undefined) {
+            navToDashboard();
+          }else {
+ 
+            navToLogin();
+          }
+        } else {
+ 
+          navToLogin();
+        }
+      } catch (error) {
+
+
+      
+      }
+    }
+
+    retrieveUserSession();
+  }, []);
+
   return (
     <View style={styles.container}>
     <View style={styles.circle}></View>
@@ -24,7 +59,7 @@ export default function Home() {
     </View>
 
    
-    <TouchableOpacity onPress={onpresslogin} style={styles.welbutton} ><Text style={styles.welbuttontext}>Get Stared</Text></TouchableOpacity>
+    <TouchableOpacity onPress={navToLogin} style={styles.welbutton} ><Text style={styles.welbuttontext}>Get Stared</Text></TouchableOpacity>
   
   </View>
   );

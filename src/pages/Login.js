@@ -4,38 +4,80 @@ import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity } from 'reac
 import { useNavigation } from '@react-navigation/native';
 import LoginStructure from '../components/LoginStructure';
 import InputTextCon from '../components/inputTextCon';
+import EncryptedStorage from 'react-native-encrypted-storage';
 
 
-
-
-const credentials = [
-  { username: 'aasath', password: '123' },
-  // Add more credentials if needed
-];
 
 export default function Login() {
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessageUser, seterrorMessageUser] = useState('');
+  const [errorMessagePassword, seterrorMessagePassword] = useState('');
 
 
-  const handleLogin = () => {
-    // Check if the entered credentials match any in the array
-    const matchedCredentials = credentials.find(
-      (cred) => cred.username === username && cred.password === password
-    );
+  const Login = () => {
 
-    if (matchedCredentials) {
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'Dashboard' }],
+    var URL = "http://localhost:8081//bloodlife/Api/login.php";
+
+    var headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    };
+
+    var Data = {
+      UserName: username,
+      password: password,
+    };
+
+    fetch(URL, {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify(Data)
+    })
+      .then((response) => {
+        if (!response.ok) {
+          alert("Something Went Wrong !! Try Again");
+        }
+        return response.json();
+      })
+      .then((response) => {
+        allowLog(response.message, response.user);
+
+      })
+      .catch((error) => {
+        console.error(error);
       });
-      // Add navigation logic here to navigate to the next screen on successful login
-    } else {
-      alert('Invalid credentials. Please try again.');
-    }
   };
 
+
+
+  const allowLog = (message, array) => {
+    if (message == true && array.donorId == !null) {
+      navDash();
+      storeUserSession(array.donorId);
+    } else {
+      alert("Invalid User Name or Password");
+    }
+  }
+
+ 
+
+  async function storeUserSession(donorId) {
+    try {
+      await EncryptedStorage.setItem(
+        "user_session",
+        JSON.stringify({
+          donorId: donorId,
+
+        })
+      );
+
+
+    } catch (error) {
+      alert("Something Went Wrong !! Try Again")
+    }
+  }
 
   const navigation = useNavigation();
 
@@ -44,7 +86,34 @@ export default function Login() {
 
   }
 
+  const navDash = () => {
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Dashboard' }],
+    });
+  };
 
+
+  const vaitation = () => {
+
+    seterrorMessageUser('');
+    seterrorMessagePassword('');
+
+    if (username === '') {
+      seterrorMessageUser('User Name is Required');
+    }
+
+    // Validate password
+    if (password === '') {
+      seterrorMessagePassword('Password Is Required');
+    }
+
+    // If both fields are non-empty, you can proceed with further actions.
+    if (username !== '' && password !== '') {
+      Login();
+
+    }
+  }
 
 
   return (
@@ -61,6 +130,7 @@ export default function Login() {
         password={false}
 
       />
+      <Text style={{ color: "red" }}>{errorMessageUser}</Text>
       <View style={styles.breakElement} />
 
       <View style={styles.break} />
@@ -71,6 +141,7 @@ export default function Login() {
         password={true}
 
       />
+      <Text style={{ color: "red" }}>{errorMessagePassword}</Text>
       <View style={styles.break} />
       <View style={{ width: '95%' }}>
         <TouchableOpacity onPress={navForgotPass1}><Text style={{ color: '#3498DB', textAlign: 'right', }}>Forgot Password?</Text></TouchableOpacity>
@@ -78,7 +149,7 @@ export default function Login() {
 
       <View style={styles.breakElement} />
       <View style={styles.buttonelement}>
-        <TouchableOpacity onPress={handleLogin} style={styles.logbutton} ><Text style={{ color: '#fff', fontSize: 14, fontWeight: 500, }}>Login</Text></TouchableOpacity>
+        <TouchableOpacity onPress={vaitation} style={styles.logbutton} ><Text style={{ color: '#fff', fontSize: 14, fontWeight: 500, }}>Login</Text></TouchableOpacity>
       </View>
 
 

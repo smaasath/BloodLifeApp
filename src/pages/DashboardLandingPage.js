@@ -1,8 +1,10 @@
 import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useState,useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import DashboardStructure from '../components/DashboardStructure';
 import BloodBankRequest from '../components/BloodBankRequest';
+import EncryptedStorage from 'react-native-encrypted-storage';
+
 
 
 
@@ -101,14 +103,35 @@ function Children2() {
 }
 
 
+
+
+
 export default function DashboardLandingPage() {
 
+    const [donorId, setDonorId] = useState('');
 
+    useEffect(() => {
+        async function retrieveUserSession() {
+          try {
+            const session = await EncryptedStorage.getItem("user_session");
+    
+            if (session !== undefined) {
+                const parsedSession = JSON.parse(session);
+                setDonorId(parsedSession.donorId);
+            }
+          } catch (error) {
 
+            console.error("Error retrieving user session:", error);
+          }
+        }
+    
+        retrieveUserSession();
+      }, []);
 
 
     return (
         <>
+        <Text style={{color:'red'}}>{donorId}</Text>
             <DashboardStructure children1={<Children1 date={"2023-09-23"} />} children2={<Children2 />}></DashboardStructure>
         </>
     )

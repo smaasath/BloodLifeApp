@@ -31,9 +31,9 @@ function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Dashboard" component={Dashboard} options={{ headerShown: false }} />
         <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+        <Stack.Screen name="Dashboard" component={Dashboard} options={{ headerShown: false }} />
         <Stack.Screen name="forgotPassword1" component={ForgotPassword1} options={{ headerShown: false }} />
         <Stack.Screen name="ForgotPassword2" component={ForgotPassword2} options={{ headerShown: false }} />
         <Stack.Screen name="ForgotPassword3" component={ForgotPassword3} options={{ headerShown: false }} />

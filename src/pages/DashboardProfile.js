@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, Image, TouchableOpacity, Switch, isEnabled, tog
 import React, { useState } from 'react';
 import DashboardStructure from '../components/DashboardStructure'
 import { useNavigation } from '@react-navigation/native';
+import EncryptedStorage from 'react-native-encrypted-storage';
 
 
 
@@ -22,12 +23,29 @@ function Children2() {
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
   const navigation = useNavigation();
-  const logout = () => {
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Home' }],
-    });
+  const logout = async () => {
+    try {
+      await clearStorage();
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Home' }],
+      });
+    } catch (error) {
+      // Handle any potential errors that occur during storage clearing
+      console.error("Error clearing storage:", error);
+    }
+  }
 
+
+
+  async function clearStorage() {
+    try {
+      await EncryptedStorage.clear();
+    } catch (error) {
+      // Handle any potential errors that occur during storage clearing
+      console.error("Error clearing storage:", error);
+      throw error; // Rethrow the error to be caught in the logout function
+    }
   }
 
   return (
