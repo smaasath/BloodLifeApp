@@ -1,10 +1,11 @@
 
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import LoginStructure from '../components/LoginStructure';
 import InputTextCon from '../components/inputTextCon';
 import EncryptedStorage from 'react-native-encrypted-storage';
+import { fetchData } from '../services/FetchLogin';
 
 
 
@@ -14,41 +15,22 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [errorMessageUser, seterrorMessageUser] = useState('');
   const [errorMessagePassword, seterrorMessagePassword] = useState('');
+  const [LogArray, setLogArray] = useState('');
 
 
-  const Login = () => {
 
-    var URL = "http://localhost:8081//bloodlife/Api/login.php";
-
-    var headers = {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    };
-
-    var Data = {
-      UserName: username,
-      password: password,
-    };
-
-    fetch(URL, {
-      method: 'POST',
-      headers: headers,
-      body: JSON.stringify(Data)
-    })
-      .then((response) => {
-        if (!response.ok) {
-          alert("Something Went Wrong !! Try Again");
+  useEffect(() => {
+    fetchData(username, password)
+      .then((data) => {
+        if (data !== null) {
+          setLogArray(data);
+          
         }
-        return response.json();
-      })
-      .then((response) => {
-        allowLog(response.message, response.user);
-
       })
       .catch((error) => {
-        console.error(error);
+        Alert.alert("Error", error.message);
       });
-  };
+  }, []);
 
 
 
@@ -110,7 +92,8 @@ export default function Login() {
 
     // If both fields are non-empty, you can proceed with further actions.
     if (username !== '' && password !== '') {
-      Login();
+      allowLog(LogArray.message, LogArray.user);
+     
 
     }
   }
