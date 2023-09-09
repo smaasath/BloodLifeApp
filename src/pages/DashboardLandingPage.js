@@ -94,7 +94,7 @@ function Children2({ Data }) {
                 <View style={styles.childrenconReq}>
                     {Data.slice(0, 6).map((item, index) => (
                         <View key={index}>
-                            <BloodBankRequest status={item.requestStatus} BloodType={item.bloodGroup} BloodQuntity={item.bloodQuantity + "ml"} RequestID={"B" + item.bloodBankRequestId} RequestDate={item.createdDate} RequestHospital={item.name || "Blood Bank Request"}></BloodBankRequest>
+                            <BloodBankRequest status={item.requestStatus} BloodType={item.bloodGroup} BloodQuntity={item.bloodQuantity + "ml"} RequestID={"B" + item.bloodBankRequestId} RequestDate={item.createdDate} RequestHospital={item.name || "Blood Bank Request"} location={item.hospitalAddress} bloodBankName={item.bloodBankName} bloodGroup={item.bloodGroup}></BloodBankRequest>
                         </View>
                     ))}
 

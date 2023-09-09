@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Text, View, StyleSheet,TouchableOpacity } from "react-native";
 import Modal from "react-native-modal";
 
-function RequestModel({ isModalVisible, toggleModal }) {
+function RequestModel({ isModalVisible, toggleModal,status, BloodQuntity, RequestID, RequestDate, RequestHospital,location,bloodBankName,bloodGroup }) {
 
 
   return (
@@ -18,11 +18,11 @@ function RequestModel({ isModalVisible, toggleModal }) {
           <View style={{...styles.rowCon, marginBottom:20, marginTop:25}}>
 
             <View style={{ ...styles.colConHead, alignItems: 'flex-start', justifyContent: 'center' }}>
-              <Text style={styles.fisrtText}>B+</Text>
+              <Text style={styles.fisrtText}>{bloodGroup}</Text>
             </View>
 
             <View style={{ ...styles.colConContent, alignItems: 'flex-end', justifyContent: 'center' }}>
-              <Text style={{ ...styles.fisrtText, color: '#FF6565' }}>200ml</Text>
+              <Text style={{ ...styles.fisrtText, color: '#FF6565' }}>{BloodQuntity}</Text>
             </View>
 
           </View>
@@ -34,7 +34,7 @@ function RequestModel({ isModalVisible, toggleModal }) {
             </View>
 
             <View style={{ ...styles.colConContent}}>
-              <Text style={{ ...styles.conText}}>BR001</Text>
+              <Text style={{ ...styles.conText}}>{RequestID}</Text>
             </View>
 
           </View>
@@ -47,7 +47,7 @@ function RequestModel({ isModalVisible, toggleModal }) {
             </View>
 
             <View style={{ ...styles.colConContent}}>
-              <Text style={{ ...styles.conText}}>Kalmunai Blood Bank</Text>
+              <Text style={{ ...styles.conText}}>{bloodBankName}</Text>
             </View>
 
           </View>
@@ -60,7 +60,7 @@ function RequestModel({ isModalVisible, toggleModal }) {
             </View>
 
             <View style={{ ...styles.colConContent}}>
-              <Text style={{ ...styles.conText}}>Kalmunai Base Hospital</Text>
+              <Text style={{ ...styles.conText}}>{RequestHospital}</Text>
             </View>
 
           </View>
@@ -73,7 +73,7 @@ function RequestModel({ isModalVisible, toggleModal }) {
             </View>
 
             <View style={{ ...styles.colConContent}}>
-              <Text style={{ ...styles.conText}}>185 a/q, Main Street, Kalmunai</Text>
+              <Text style={{ ...styles.conText}}>{location}</Text>
             </View>
 
           </View>
@@ -86,7 +86,7 @@ function RequestModel({ isModalVisible, toggleModal }) {
             </View>
 
             <View style={{ ...styles.colConContent}}>
-              <Text style={{ ...styles.conText}}>2023/07/20</Text>
+              <Text style={{ ...styles.conText}}>{RequestDate}</Text>
             </View>
 
           </View>
@@ -99,7 +99,7 @@ function RequestModel({ isModalVisible, toggleModal }) {
             </View>
 
             <View style={{ ...styles.colConContent}}>
-              <Text style={{ ...styles.conText}}>Urgent</Text>
+              <Text style={{ ...styles.conText}}>{status}</Text>
             </View>
 
           </View>

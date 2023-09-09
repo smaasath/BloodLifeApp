@@ -20,7 +20,7 @@ const setcolorbystatus = (status) => {
 
 
 
-export default function BloodBankRequest({ status, BloodQuntity, RequestID, RequestDate, RequestHospital }) {
+export default function BloodBankRequest({ status, BloodQuntity, RequestID, RequestDate, RequestHospital,location,bloodBankName,bloodGroup}) {
 
     const [isModalVisible, setModalVisible] = useState(false);
 
@@ -34,7 +34,19 @@ export default function BloodBankRequest({ status, BloodQuntity, RequestID, Requ
 
 
         <>
-            <RequestModel isModalVisible={isModalVisible} toggleModal={toggleModal}>
+            <RequestModel 
+            isModalVisible={isModalVisible} 
+            toggleModal={toggleModal} 
+            status={status}
+            BloodQuntity={BloodQuntity}
+            RequestID={RequestID}
+            RequestDate={RequestDate}
+            RequestHospital={RequestHospital}
+            location={location}
+            bloodBankName={bloodBankName}
+            bloodGroup={bloodGroup}
+            
+            >
 
             </RequestModel>
             <TouchableOpacity
