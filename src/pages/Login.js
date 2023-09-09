@@ -15,29 +15,52 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [errorMessageUser, seterrorMessageUser] = useState('');
   const [errorMessagePassword, seterrorMessagePassword] = useState('');
-  const [LogArray, setLogArray] = useState('');
 
 
 
-  useEffect(() => {
-    fetchData(username, password)
-      .then((data) => {
-        if (data !== null) {
-          setLogArray(data);
-          
+
+
+  const Login = () => {
+
+    var URL = "http://localhost:8081//bloodlife/Api/login.php";
+
+    var headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    };
+
+    var Data = {
+      UserName: username,
+      password: password,
+    };
+
+    fetch(URL, {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify(Data)
+    })
+      .then((response) => {
+        if (!response.ok) {
+          alert("Something Went Wrong !! Try Again");
         }
+        return response.json();
+      })
+      .then((response) => {
+        allowLog(response.message, response.user);
+        console.log(response.message, response.user);
+
       })
       .catch((error) => {
-        Alert.alert("Error", error.message);
+        
       });
-  }, []);
+  };
 
 
 
   const allowLog = (message, array) => {
-    if (message == true && array.donorId == !null) {
+    if (message == true && array.userRole == 5) {
       navDash();
-      storeUserSession(array.donorId);
+      storeUserSession(array.donorId,array.bloodBankId);
     } else {
       alert("Invalid User Name or Password");
     }
@@ -45,12 +68,13 @@ export default function Login() {
 
  
 
-  async function storeUserSession(donorId) {
+  async function storeUserSession(donorId,bloodBankId) {
     try {
       await EncryptedStorage.setItem(
         "user_session",
         JSON.stringify({
           donorId: donorId,
+          bloodBankId:bloodBankId
 
         })
       );
@@ -92,7 +116,7 @@ export default function Login() {
 
     // If both fields are non-empty, you can proceed with further actions.
     if (username !== '' && password !== '') {
-      allowLog(LogArray.message, LogArray.user);
+      Login();
      
 
     }

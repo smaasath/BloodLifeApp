@@ -1,9 +1,11 @@
-import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity } from 'react-native'
-import React, { useState,useEffect } from 'react';
+import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, RefreshControl} from 'react-native'
+import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import DashboardStructure from '../components/DashboardStructure';
 import BloodBankRequest from '../components/BloodBankRequest';
 import EncryptedStorage from 'react-native-encrypted-storage';
+import LoadPage from '../components/LoadPage';
+
 
 
 
@@ -70,7 +72,7 @@ function Children1({ date }) {
     )
 }
 
-function Children2() {
+function Children2({ Data }) {
     const navigation = useNavigation();
 
     const navToRequest = () => {
@@ -90,10 +92,13 @@ function Children2() {
                 </View>
 
                 <View style={styles.childrenconReq}>
-                    <BloodBankRequest status={"Normal"} BloodType='B+' BloodQuntity='150ml' RequestID='B001' RequestDate='2023-02-02' RequestHospital='Kalmunai Base Hospital'></BloodBankRequest>
-                    <BloodBankRequest status={"Emergency"}  BloodType='B+' BloodQuntity='100ml' RequestID='B001' RequestDate='2023-02-02' RequestHospital='Kalmunai Base Hospital'></BloodBankRequest>
-                    <BloodBankRequest status={"Urgent"}  BloodType='B+' BloodQuntity='250ml' RequestID='B001' RequestDate='2023-02-02' RequestHospital='Kalmunai Base Hospital'></BloodBankRequest>
-                    <BloodBankRequest status={"completed"}  BloodType='B+' BloodQuntity='50ml' RequestID='B001' RequestDate='2023-02-02' RequestHospital='Kalmunai Base Hospital'></BloodBankRequest>
+                    {Data.slice(0, 6).map((item, index) => (
+                        <View key={index}>
+                            <BloodBankRequest status={item.requestStatus} BloodType={item.bloodGroup} BloodQuntity={item.bloodQuantity + "ml"} RequestID={"B" + item.bloodBankRequestId} RequestDate={item.createdDate} RequestHospital={item.name || "Blood Bank Request"}></BloodBankRequest>
+                        </View>
+                    ))}
+
+
                 </View>
 
 
@@ -109,30 +114,163 @@ function Children2() {
 export default function DashboardLandingPage() {
 
     const [donorId, setDonorId] = useState('');
+    const [bloodBankId, setbloodBankId] = useState('');
+    const [UserArray, setUserArray] = useState([]);
+    const [ReqArray, setReqArray] = useState([]);
+    const [refreshing, setRefreshing] = React.useState(false);
+    const [loader, setloader] = React.useState(false);
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        fetchData();
+        setTimeout(() => {
+            setRefreshing(false);
+        }, 2000);
+    }, []);
+
 
     useEffect(() => {
-        async function retrieveUserSession() {
-          try {
+        fetchData();
+    }, [donorId, bloodBankId]);
+
+
+    async function fetchData() {
+
+        await retrieveUserSession();
+        await fetchUser();
+        await fetchReq();
+
+    }
+
+    async function retrieveUserSession() {
+        try {
             const session = await EncryptedStorage.getItem("user_session");
-    
+
             if (session !== undefined) {
                 const parsedSession = JSON.parse(session);
                 setDonorId(parsedSession.donorId);
+                setbloodBankId(parsedSession.bloodBankId);
             }
-          } catch (error) {
-
+        } catch (error) {
             console.error("Error retrieving user session:", error);
-          }
         }
+    }
+
+    const fetchUser = async () => {
+
+
+        var URL = "http://localhost:8081//bloodlife/Api/DonorApi.php";
+
+        var headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        };
+
+        var Data = {
+            donorId: donorId,
+
+        };
+
+        fetch(URL, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(Data)
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    setloader(true);
+                }
+                return response.json();
+            })
+            .then((response) => {
+                if (response.message == "Request Not Found") {
+                    setloader(true);
+                    setUserArray('');
+                } else {
+                    setUserArray(response);
+                    setloader(false);
+
+                }
+
+
+
+            })
+            .catch((error) => {
+
+            });
+    };
+
+
+    const fetchReq = async () => {
+
+        var URL = "http://localhost:8081//bloodlife/Api/BloodBankRequestApi.php";
+
+        var headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        };
+
+        var Data = {
+            bloodBankId: bloodBankId,
+
+        };
+
+        fetch(URL, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(Data)
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    setloader(true);
+                }
+                return response.json();
+            })
+            .then((response) => {
+                if (response.message == "Request Not Found") {
+                    setloader(true);
+                    setReqArray('');
+                } else {
+                    setReqArray(response);
+                    setloader(false);
+
+                }
+
+
+            })
+            .catch((error) => {
+
+            });
+    };
+
+
+
+
+
+
+
+
     
-        retrieveUserSession();
-      }, []);
-
-
     return (
         <>
-        <Text style={{color:'red'}}>{donorId}</Text>
-            <DashboardStructure children1={<Children1 date={"2023-09-23"} />} children2={<Children2 />}></DashboardStructure>
+
+            <ScrollView
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                }>
+                {loader == true ? (
+                    <>
+                    <LoadPage></LoadPage>
+                    </>
+                ) : (
+                    <DashboardStructure
+                        children1={<Children1 date={UserArray.donationLastDate} />}
+                        children2={<Children2 Data={ReqArray} />}
+                    ></DashboardStructure>
+                )}
+
+            </ScrollView>
+
         </>
     )
 }
