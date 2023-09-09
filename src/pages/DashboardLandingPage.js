@@ -185,7 +185,7 @@ export default function DashboardLandingPage() {
             .then((response) => {
                 if (response.message == "Request Not Found") {
                     setloader(true);
-                   
+                    setUserArray("");
                 } else {
                     setUserArray(response);
                     setloader(false);
@@ -229,7 +229,7 @@ export default function DashboardLandingPage() {
             .then((response) => {
                 if (response.message == "Request Not Found") {
                     setloader(true);
-                    
+                    setReqArray("");
                 } else {
                     setReqArray(response);
                     setloader(false);

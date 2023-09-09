@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import { Button, Text, View, StyleSheet,TouchableOpacity } from "react-native";
 import Modal from "react-native-modal";
+import { useNavigation } from '@react-navigation/native';
 
 function RequestModel({ isModalVisible, toggleModal,status, BloodQuntity, RequestID, RequestDate, RequestHospital,location,bloodBankName,bloodGroup }) {
-
+  const navigation = useNavigation();
+  const navToQrMain = () => {
+    navigation.navigate("QrMain");
+};
 
   return (
     <>
@@ -124,7 +128,9 @@ function RequestModel({ isModalVisible, toggleModal,status, BloodQuntity, Reques
             </View>
 
             <View style={{ ...styles.colConContent, alignItems: 'flex-end', justifyContent: 'center' }}>
-              <TouchableOpacity>
+              <TouchableOpacity
+              onPress={navToQrMain}
+              >
               <View style={{backgroundColor:'#FF6565', width:140, height:50,borderRadius:15,alignItems: 'center', justifyContent: 'center'}}>
               <Text style={{...styles.contentTextHead}}>Accept</Text>
               </View>
