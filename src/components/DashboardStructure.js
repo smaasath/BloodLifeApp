@@ -79,6 +79,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#FF6565',
         height: '7%',
         padding: 10,
+        paddingBottom:40,
+        
     },
 
     topbarcol1: {

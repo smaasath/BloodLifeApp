@@ -1,11 +1,12 @@
-import { StyleSheet, Text, View,ScrollView } from 'react-native'
-import React from 'react'
-import DashboardStructure from '../components/DashboardStructure'
+import React, { useState, useEffect } from 'react';
+import { ScrollView, RefreshControl, View, Text, StyleSheet } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
+import DashboardStructure from '../components/DashboardStructure';
+import LoadPage from '../components/LoadPage';
 import CampaignComponent from '../components/CampaignComponent';
 
 
-function Children2() {
+function Children2({Data}) {
   return (
     <>
       <View style={{margin:40, marginBottom:5,}}>
@@ -14,88 +15,56 @@ function Children2() {
         </Text>
       </View>
       <ScrollView>
-      <View style={styles.childrenconCamp}>
-       <CampaignComponent 
-       Title={"Test Name Campaign"} 
-       address={"185 A/1, Hajiyar Road, Sainthamaruthu-13"} 
-       status={"Active"} 
-       review={""} 
-       startDate={"2023-08-30"} 
-       district={"Ampara"} 
-       endDate={"2023-09-02"}>
-
-       </CampaignComponent>
-
-       <CampaignComponent 
-       Title={"Test Name for Campaign"} 
-       address={"185 A/1, Hajiyar Road, Sainthamaruthu-13"} 
-       status={"completed"} 
-       review={"Success"} 
-       startDate={"2023-08-30"} 
-       district={"Ampara"} 
-       endDate={"2023-09-02"}>
-        
-       </CampaignComponent>
-
-       <CampaignComponent 
-       Title={"Test Name for Campaign"} 
-       address={"185 A/1, Hajiyar Road, Sainthamaruthu-13"} 
-       status={"OnGoing"} 
-       review={""} 
-       startDate={"2023-08-30"} 
-       district={"Ampara"} 
-       endDate={"2023-09-02"}>
-        
-       </CampaignComponent>
-
-       <CampaignComponent 
-       Title={"Test Name Campaign"} 
-       address={"185 A/1, Hajiyar Road, Sainthamaruthu-13"} 
-       status={"completed"} 
-       review={"Average"} 
-       startDate={"2023-08-30"} 
-       district={"Ampara"} 
-       endDate={"2023-09-02"}>
-        
-       </CampaignComponent>
-
-       <CampaignComponent 
-       Title={"Test Name Campaign"} 
-       address={"185 A/1, Hajiyar Road, Sainthamaruthu-13"} 
-       status={"completed"} 
-       review={"Fail"} 
-       startDate={"2023-08-30"} 
-       district={"Ampara"} 
-       endDate={"2023-09-02"}>
-        
-       </CampaignComponent>
-
     
-
-
-       
-        
+      <View style={styles.childrenconCamp}>
+        {Data?.length > 0 ? (
+          Data.map((item, index) => (
+            <CampaignComponent 
+            key={index}
+            Title={item.Title} 
+            address={item.address} 
+            status={item.status} 
+            review={item.review || "Not Reviewed yet"} 
+            startDate={item.startDate} 
+            district={item.district} 
+            endDate={item.endDate}>
+     
+            </CampaignComponent>
+          ))
+        ) : (
+          <Text style={{color:'red'}}>No requests found</Text>
+        )}
       </View>
       </ScrollView>
     </>
   )
 }
-function Children1() {
+function Children1({ status, setstatus,district,setdistrict}) {
   return (
-    <View style={{ margin: 30, flexDirection:'row', justifyContent:'space-between' }}>
+    <View style={{ margin: 30, flexDirection:'row',}}>
+      <View style={{flex:1,alignItems:'center'}}>
+      <Text>Status</Text>
       <SelectDropdown
-        data={["All","my", "Completed", "Active"]}
-        buttonStyle={{ borderRadius: 10, width: '40%', height: 40 }}
+        data={["All", "Completed", "Active"]}
+        buttonStyle={{ borderRadius: 10, width: '70%', height: 40,margin:10 }}
         defaultButtonText={["Status"]}
         buttonTextStyle={{ fontSize: 14, }}
+        onSelect={(selectedItem) => setstatus(selectedItem)}
       />
+      </View>
 
-<SelectDropdown
-        data={["All", "Ampara", "Kandy"]}
-        buttonStyle={{ borderRadius: 10, width: '40%', height: 40 }}
+      <View style={{flex:1,alignItems:'center'}}>
+       <Text>District</Text>
+      <SelectDropdown
+        data={["All", "Ampara", "Anuradhapura","Batticaloa","Galle","Hambantota","Jaffna","Kandy","Kegalle","Kilinochchi","Kurunegala","Mannar","Matale","Matara","Mullaitivu","Nuwara Eliya","Polonnaruwa","Puttalam","Ratnapura","Trincomalee","Vavuniya"]}
+        buttonStyle={{ borderRadius: 10, width: '70%', height: 40,margin:10 }}
         defaultButtonText={["District"]}
         buttonTextStyle={{ fontSize: 14, }}
+        onSelect={(selectedItem) => setdistrict(selectedItem)}
       />
+      </View>
+
+
 
     </View>
   )
@@ -103,8 +72,89 @@ function Children1() {
 
 
 export default function DashboradCampaign() {
+ 
+  const [campArray, setcampArray] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+  const [loader, setLoader] = useState(false);
+  const [FilterreqArray, setFilterreqArray] = useState([]);
+  const [status, setstatus] = useState("All");
+  const [district, setdistrict] = useState("All");
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchData();
+    setRefreshing(false);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+
+  useEffect(() => {
+    if (status === 'All' && district === 'All') {
+      // If both status and district are 'All', show all campaigns
+      setFilterreqArray(campArray);
+    } else {
+      const filteredData = campArray.filter((item) => item.status === status || item.district === district);
+      setFilterreqArray(filteredData);
+    }
+  }, [campArray, status, district]);
+
+  async function fetchData() {
+    await fetchReq();
+  }
+
+
+
+  const fetchReq = async () => {
+    var URL = 'http://localhost:8081//bloodlife/Api/CampaignApi.php';
+
+    var headers = {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    };
+
+    var Data = {
+      
+    };
+
+    fetch(URL, {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify(Data),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          setLoader(true);
+        }
+        return response.json();
+      })
+      .then((response) => {
+        if (response.message === 'Request Not Found') {
+          setLoader(true);
+          setcampArray([]);
+        } else {
+          setcampArray(response);
+          setLoader(false);
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching requests:', error);
+      });
+  };
   return (
-    <DashboardStructure children1={<Children1 />} children2={<Children2 />}></DashboardStructure>
+
+    <ScrollView
+    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+  >
+    {loader ? (
+      <LoadPage />
+    ) : (
+      <DashboardStructure children1={<Children1 status={status} setstatus={setstatus} district={district} setdistrict={setdistrict} />} children2={<Children2 Data={FilterreqArray} />}></DashboardStructure>
+    )}
+  </ScrollView>
+    
   )
 }
 
