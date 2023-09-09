@@ -92,7 +92,7 @@ function Children2({ Data }) {
                 </View>
 
                 <View style={styles.childrenconReq}>
-                    {Data.slice(0, 6).map((item, index) => (
+                    {Data?.length > 0 && Data.slice(0, 6).map((item, index) => (
                         <View key={index}>
                             <BloodBankRequest status={item.requestStatus} BloodType={item.bloodGroup} BloodQuntity={item.bloodQuantity + "ml"} RequestID={"B" + item.bloodBankRequestId} RequestDate={item.createdDate} RequestHospital={item.name || "Blood Bank Request"} location={item.hospitalAddress} bloodBankName={item.bloodBankName} bloodGroup={item.bloodGroup}></BloodBankRequest>
                         </View>
@@ -120,17 +120,17 @@ export default function DashboardLandingPage() {
     const [refreshing, setRefreshing] = React.useState(false);
     const [loader, setloader] = React.useState(false);
 
-    const onRefresh = React.useCallback(() => {
+    const onRefresh = async () => {
         setRefreshing(true);
-        fetchData();
-        setTimeout(() => {
-            setRefreshing(false);
-        }, 2000);
-    }, []);
+        await fetchData();
+        setRefreshing(false);
+      };
 
 
     useEffect(() => {
+        setRefreshing(true);
         fetchData();
+        setRefreshing(false);
     }, [donorId, bloodBankId]);
 
 
