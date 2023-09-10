@@ -27,7 +27,11 @@ function Children2({Data}) {
             review={item.review || "Not Reviewed yet"} 
             startDate={item.startDate} 
             district={item.district} 
-            endDate={item.endDate}>
+            endDate={item.endDate}
+            ContactNo={item.ContactNo}
+            campaignId={item.campaignId}
+            
+            >
      
             </CampaignComponent>
           ))
@@ -95,8 +99,14 @@ export default function DashboradCampaign() {
     if (status === 'All' && district === 'All') {
       // If both status and district are 'All', show all campaigns
       setFilterreqArray(campArray);
-    } else {
-      const filteredData = campArray.filter((item) => item.status === status || item.district === district);
+    } else if (status === 'All' && district != 'All') {
+      const filteredData = campArray.filter((item) => item.district === district);
+      setFilterreqArray(filteredData);
+    }else if (status != 'All' && district === 'All') {
+      const filteredData = campArray.filter((item) => item.status === status);
+      setFilterreqArray(filteredData);
+    }else {
+      const filteredData = campArray.filter((item) => item.status === status && item.district === district);
       setFilterreqArray(filteredData);
     }
   }, [campArray, status, district]);

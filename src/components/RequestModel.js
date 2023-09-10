@@ -19,6 +19,7 @@ function RequestModel({ isModalVisible, toggleModal,status, BloodQuntity, Reques
 
         <View style={styles.bigCon}>
           <View style={{ alignItems: 'center', padding: 10 }}><Text style={{ fontSize: 25, fontWeight: 'bold', color: 'black' }}>Request Details</Text></View>
+          <View style={{height:1, width:'100%', backgroundColor:'black', margin:0,padding:0 }}></View>
           <View style={{...styles.rowCon, marginBottom:20, marginTop:25}}>
 
             <View style={{ ...styles.colConHead, alignItems: 'flex-start', justifyContent: 'center' }}>

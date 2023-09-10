@@ -1,5 +1,6 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View, } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
+import CampaignModel from './CampaignModel';
 
 
 
@@ -7,9 +8,7 @@ const setcolorbystatus = (status) => {
     switch (status) {
         case "Active":
             return '#4099ff';
-        case "OnGoing":
-            return '#FFB64D';
-        case "completed":
+        case "Completed":
             return '#2ed8b6';
     }
 };
@@ -22,17 +21,48 @@ const setcolorbyReview = (Review) => {
             return '#FFB64D';
         case "Fail":
             return '#FF5370';
+        default:
+            return '#000';
     }
 };
 
 
-export default function CampaignComponent({Title, address, startDate, review, status, district, endDate}) {
+export default function CampaignComponent({ Title, address, startDate, review, status, district, endDate, ContactNo, campaignId }) {
+
+    const [isModalVisible, setModalVisible] = useState(false);
+
+    const toggleModal = () => {
+        setModalVisible(!isModalVisible);
+    };
+
+   
+
+
     const TextColors = setcolorbystatus(status);
     const TextColorsReview = setcolorbyReview(review);
 
     return (
         <>
-            <TouchableOpacity>
+
+            <CampaignModel
+                isModalVisible={isModalVisible}
+                toggleModal={toggleModal}
+                campaignId={campaignId}
+                Title={Title}
+                startDate={startDate}
+                endDate={endDate}
+                review={review}
+                status={status}
+                district={district}
+                ContactNo={ContactNo}
+                address={address}
+
+            >
+
+            </CampaignModel>
+            <TouchableOpacity
+             onPress={toggleModal}
+            >
                 <View style={styles.campcon}>
                     <View style={{ flexDirection: 'row', height: 80 }}>
                         <View style={{ flex: 3, }}>
