@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity, Switch, isEnabled, toggleSwitch, } from 'react-native'
-import React, { useState } from 'react';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Switch, isEnabled, toggleSwitch,ScrollView,RefreshControl } from 'react-native'
+import React, { useState ,useEffect} from 'react';
 import DashboardStructure from '../components/DashboardStructure'
 import { useNavigation } from '@react-navigation/native';
 import EncryptedStorage from 'react-native-encrypted-storage';
@@ -7,11 +7,16 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 
 
 
-function Children1() {
+function Children1({data}) {
   return (
     <>
       <View style={{ zIndex: 1, marginTop: 30, marginBottom: -75, alignItems: 'center' }}>
-        <Image source={require('../../assets/sample-profile.jpg')} style={{ height: 150, width: 150, borderRadius: 90 }}></Image>
+        <Image  source={
+    data.image
+      ? { uri: `data:image/jpeg;base64,${data.image}` }
+      : require('../../assets/testuser.png')
+  }
+   style={{ height: 150, width: 150, borderRadius: 90 }}></Image>
 
       </View>
 
@@ -19,7 +24,7 @@ function Children1() {
   )
 }
 
-function Children2() {
+function Children2({name,bloodGroup,dob,contactNumber,nic,donationLastDate,availability,medicalReport,}) {
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
   const navigation = useNavigation();
@@ -180,9 +185,106 @@ function Children2() {
 
 export default function DashboardProfile() {
 
+
+  const [donorId, setDonorId] = useState('');
+  const [UserArray, setUserArray] = useState([]);
+  const [refreshing, setRefreshing] = React.useState(false);
+  const [loader, setloader] = React.useState(false);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchData();
+    setRefreshing(false);
+  };
+
+  useEffect(() => {
+    setRefreshing(true);
+    fetchData();
+    setRefreshing(false);
+  }, [donorId]);
+
+
+  async function fetchData() {
+    await retrieveUserSession();
+    await fetchUser();
+  
+  }
+  async function retrieveUserSession() {
+    try {
+      const session = await EncryptedStorage.getItem("user_session");
+
+      if (session !== undefined) {
+        const parsedSession = JSON.parse(session);
+        setDonorId(parsedSession.donorId);
+       
+      }
+    } catch (error) {
+      console.error("Error retrieving user session:", error);
+    }
+  }
+
+  const fetchUser = async () => {
+
+
+    var URL = "http://localhost:8081//bloodlife/Api/DonorApi.php";
+
+    var headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    };
+
+    var Data = {
+      donorId: donorId,
+
+    };
+
+    fetch(URL, {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify(Data)
+    })
+      .then((response) => {
+        if (!response.ok) {
+          setloader(true);
+      }
+      return response.json();
+      })
+      .then((response) => {
+        if (response.message == "Request Not Found") {
+          setloader(true);
+          setUserArray("");
+      } else {
+          setUserArray(response);
+          setloader(false);
+
+      }
+
+
+
+      })
+      .catch((error) => {
+        setloader(true);
+      });
+  };
+
+
   return (
     <>
-      <DashboardStructure children1={<Children1 />} children2={<Children2 />}></DashboardStructure>
+
+<ScrollView
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                }>
+                {loader == true ? (
+                    <>
+                    <LoadPage></LoadPage>
+                    </>
+                ) : (
+                  <DashboardStructure children1={<Children1 data={UserArray} />} children2={<Children2 />}></DashboardStructure>
+                )}
+
+            </ScrollView>
+     
 
     </>
   )

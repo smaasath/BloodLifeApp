@@ -196,7 +196,7 @@ export default function DashboardLandingPage() {
 
             })
             .catch((error) => {
-
+                setloader(true);
             });
     };
 
@@ -239,7 +239,7 @@ export default function DashboardLandingPage() {
 
             })
             .catch((error) => {
-
+                setloader(true);
             });
     };
 

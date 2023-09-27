@@ -94,10 +94,9 @@ export default function DashboradCampaign() {
     fetchData();
   }, []);
 
-
+//Filter for Campaign 4
   useEffect(() => {
     if (status === 'All' && district === 'All') {
-      // If both status and district are 'All', show all campaigns
       setFilterreqArray(campArray);
     } else if (status === 'All' && district != 'All') {
       const filteredData = campArray.filter((item) => item.district === district);
@@ -110,6 +109,7 @@ export default function DashboradCampaign() {
       setFilterreqArray(filteredData);
     }
   }, [campArray, status, district]);
+  
 
   async function fetchData() {
     await fetchReq();

@@ -51,7 +51,7 @@ export default function Login() {
 
       })
       .catch((error) => {
-        
+        alert("Something Went Wrong !! Try Again");
       });
   };
 
