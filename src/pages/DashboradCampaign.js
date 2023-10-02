@@ -150,7 +150,7 @@ export default function DashboradCampaign() {
         }
       })
       .catch((error) => {
-        console.error('Error fetching requests:', error);
+       
       });
   };
   return (

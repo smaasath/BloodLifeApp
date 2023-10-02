@@ -27,7 +27,7 @@ export default function Home() {
         if (session !== undefined) {
 
           const parsedSession = JSON.parse(session);
-          if (parsedSession.donorId !== undefined) {
+          if (parsedSession.Token !== undefined) {
             navToDashboard();
           }else {
  

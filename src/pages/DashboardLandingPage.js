@@ -13,6 +13,7 @@ import LoadPage from '../components/LoadPage';
 
 
 
+
 function subtractLocalDateFromEnteredDate(enteredDateString) {
     // Convert the entered date string to a Date object
     const enteredDate = new Date(enteredDateString);
@@ -113,8 +114,10 @@ function Children2({ Data }) {
 
 export default function DashboardLandingPage() {
 
-    const [donorId, setDonorId] = useState('');
-    const [bloodBankId, setbloodBankId] = useState('');
+    
+
+
+    const [Token, setToken] = useState('');
     const [UserArray, setUserArray] = useState([]);
     const [ReqArray, setReqArray] = useState([]);
     const [refreshing, setRefreshing] = React.useState(false);
@@ -131,7 +134,7 @@ export default function DashboardLandingPage() {
         setRefreshing(true);
         fetchData();
         setRefreshing(false);
-    }, [donorId, bloodBankId]);
+    }, [Token]);
 
 
     async function fetchData() {
@@ -148,8 +151,9 @@ export default function DashboardLandingPage() {
 
             if (session !== undefined) {
                 const parsedSession = JSON.parse(session);
-                setDonorId(parsedSession.donorId);
-                setbloodBankId(parsedSession.bloodBankId);
+                setToken(parsedSession.Token);
+                
+                
             }
         } catch (error) {
             console.error("Error retrieving user session:", error);
@@ -162,19 +166,16 @@ export default function DashboardLandingPage() {
         var URL = "http://localhost:8081//bloodlife/Api/DonorApi.php";
 
         var headers = {
+            'Authorization': `Bearer ${Token}`,
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         };
 
-        var Data = {
-            donorId: donorId,
 
-        };
 
         fetch(URL, {
-            method: 'POST',
-            headers: headers,
-            body: JSON.stringify(Data)
+            method: 'GET',
+            headers: headers,        
         })
             .then((response) => {
                 if (!response.ok) {
@@ -183,7 +184,7 @@ export default function DashboardLandingPage() {
                 return response.json();
             })
             .then((response) => {
-                if (response.message == "Request Not Found") {
+                if (response.message == false) {
                     setloader(true);
                     setUserArray("");
                 } else {
@@ -206,19 +207,17 @@ export default function DashboardLandingPage() {
         var URL = "http://localhost:8081//bloodlife/Api/BloodBankRequestApi.php";
 
         var headers = {
+            'Authorization': `Bearer ${Token}`,
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         };
-
-        var Data = {
-            bloodBankId: bloodBankId,
-
-        };
+        
+  
 
         fetch(URL, {
-            method: 'POST',
-            headers: headers,
-            body: JSON.stringify(Data)
+            method: 'GET',
+            headers: headers,        
+           
         })
             .then((response) => {
                 if (!response.ok) {
@@ -227,7 +226,7 @@ export default function DashboardLandingPage() {
                 return response.json();
             })
             .then((response) => {
-                if (response.message == "Request Not Found") {
+                if (response.message == true) {
                     setloader(true);
                     setReqArray("");
                 } else {

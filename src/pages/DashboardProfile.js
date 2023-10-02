@@ -3,7 +3,7 @@ import React, { useState ,useEffect} from 'react';
 import DashboardStructure from '../components/DashboardStructure'
 import { useNavigation } from '@react-navigation/native';
 import EncryptedStorage from 'react-native-encrypted-storage';
-
+import LoadPage from '../components/LoadPage';
 
 
 

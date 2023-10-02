@@ -9,6 +9,7 @@ import DashboardRanking from './DashboardRanking';
 import DashboardProfile from './DashboardProfile';
 import IMAGEDASHBOARD from '../../assets/view-dashboard.png';
 import EncryptedStorage from 'react-native-encrypted-storage';
+import getToken from '../services/getToken';
 
 
 
@@ -18,7 +19,7 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 export default function Dashboard() {
 
   const Tab = createBottomTabNavigator();
-  const [donorId, setDonorId] = useState('');
+  const [Token, setDonorToken] = useState('');
   const [UserArray, setUserArray] = useState([]);
 
   useEffect(() => {
@@ -29,7 +30,7 @@ export default function Dashboard() {
     }
 
     fetchData();
-  }, [donorId]);
+  }, [Token]);
 
 
 
@@ -39,7 +40,8 @@ export default function Dashboard() {
 
       if (session !== undefined) {
         const parsedSession = JSON.parse(session);
-        setDonorId(parsedSession.donorId);
+        setDonorToken(parsedSession.Token);
+ 
        
       }
     } catch (error) {
@@ -47,25 +49,21 @@ export default function Dashboard() {
     }
   }
 
+
   const fetchUser = async () => {
 
 
     var URL = "http://localhost:8081//bloodlife/Api/DonorApi.php";
 
     var headers = {
+      'Authorization': `Bearer ${Token}`,
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     };
 
-    var Data = {
-      donorId: donorId,
-
-    };
-
     fetch(URL, {
-      method: 'POST',
+      method: 'GET',
       headers: headers,
-      body: JSON.stringify(Data)
     })
       .then((response) => {
         if (!response.ok) {
@@ -74,15 +72,12 @@ export default function Dashboard() {
         return response.json();
       })
       .then((response) => {
-        if (response.message == "Request Not Found") {
+        if (response.message == false) {
 
         } else {
           setUserArray(response);
 
         }
-
-
-
       })
       .catch((error) => {
         

@@ -52,7 +52,8 @@ function Children1({ status, setstatus }) {
 }
 
 export default function DashboardHospitalRequest() {
-  const [bloodBankId, setBloodBankId] = useState('');
+
+  const [Token, setToken] = useState('');
   const [reqArray, setReqArray] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [loader, setLoader] = useState(false);
@@ -67,7 +68,7 @@ export default function DashboardHospitalRequest() {
 
   useEffect(() => {
     fetchData();
-  }, [bloodBankId]);
+  }, [Token]);
 
 
   useEffect(() => {
@@ -92,7 +93,7 @@ export default function DashboardHospitalRequest() {
 
       if (session !== undefined) {
         const parsedSession = JSON.parse(session);
-        setBloodBankId(parsedSession.bloodBankId);
+        setToken(parsedSession.Token);
       }
     } catch (error) {
       console.error('Error retrieving user session:', error);
@@ -103,18 +104,17 @@ export default function DashboardHospitalRequest() {
     var URL = 'http://localhost:8081/bloodlife/Api/BloodBankRequestApi.php';
 
     var headers = {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${Token}`,
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
     };
 
-    var Data = {
-      bloodBankId: bloodBankId,
-    };
+
 
     fetch(URL, {
-      method: 'POST',
+      method: 'GET',
       headers: headers,
-      body: JSON.stringify(Data),
+    
     })
       .then((response) => {
         if (!response.ok) {
@@ -123,7 +123,7 @@ export default function DashboardHospitalRequest() {
         return response.json();
       })
       .then((response) => {
-        if (response.message === 'Request Not Found') {
+        if (response.message === false) {
           setLoader(true);
           setReqArray([]);
         } else {
@@ -132,7 +132,7 @@ export default function DashboardHospitalRequest() {
         }
       })
       .catch((error) => {
-        console.error('Error fetching requests:', error);
+        
       });
   };
 

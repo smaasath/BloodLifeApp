@@ -46,8 +46,8 @@ export default function Login() {
         return response.json();
       })
       .then((response) => {
-        allowLog(response.message, response.user);
-        console.log(response.message, response.user);
+        allowLog(response.message, response.Token);
+        console.log(response.message, response.Token);
 
       })
       .catch((error) => {
@@ -57,10 +57,11 @@ export default function Login() {
 
 
 
-  const allowLog = (message, array) => {
-    if (message == true && array.userRole == 5) {
+  const allowLog = (message, Token) => {
+    if (message == true) {
+      storeUserSession(Token);
       navDash();
-      storeUserSession(array.donorId,array.bloodBankId);
+      
     } else {
       alert("Invalid User Name or Password");
     }
@@ -68,13 +69,12 @@ export default function Login() {
 
  
 
-  async function storeUserSession(donorId,bloodBankId) {
+  async function storeUserSession(Token) {
     try {
       await EncryptedStorage.setItem(
         "user_session",
         JSON.stringify({
-          donorId: donorId,
-          bloodBankId:bloodBankId
+          Token: Token
 
         })
       );
