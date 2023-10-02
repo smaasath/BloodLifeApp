@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image,Dimensions} from 'react-native'
+import { ActivityIndicator,StyleSheet, Text, View, Image,Dimensions} from 'react-native'
 import React from 'react'
 import DashboardStructure from './DashboardStructure'
 
@@ -11,13 +11,9 @@ export default function LoadPage() {
                 <View style={{ flex: 1, }}>
                     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
 
-                        <Image
-                            source={require('../../assets/reload.png')}
-                            style={{ height: 100, width: 100, borderRadius: 90 }}
+                    <ActivityIndicator size={75} color="#FF6565" />
 
-                        />
-
-                        <Text style={{ color: 'black' }}>Please Reload the Page</Text>
+                        <Text style={{ color: 'black',fontSize:15,fontWeight:"bold",padding:10 }}>Loading..</Text>
                     </View>
 
                 </View>

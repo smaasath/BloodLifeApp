@@ -4,6 +4,7 @@ import SelectDropdown from 'react-native-select-dropdown';
 import DashboardStructure from '../components/DashboardStructure';
 import LoadPage from '../components/LoadPage';
 import CampaignComponent from '../components/CampaignComponent';
+import EncryptedStorage from 'react-native-encrypted-storage';
 
 
 function Children2({Data}) {
@@ -76,10 +77,10 @@ function Children1({ status, setstatus,district,setdistrict}) {
 
 
 export default function DashboradCampaign() {
- 
+  const [Token, setToken] = useState('');
   const [campArray, setcampArray] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-  const [loader, setLoader] = useState(false);
+  const [loader, setLoader] = useState(true);
   const [FilterreqArray, setFilterreqArray] = useState([]);
   const [status, setstatus] = useState("All");
   const [district, setdistrict] = useState("All");
@@ -91,8 +92,10 @@ export default function DashboradCampaign() {
   };
 
   useEffect(() => {
+    
     fetchData();
-  }, []);
+  
+  }, [Token]);
 
 //Filter for Campaign 4
   useEffect(() => {
@@ -112,27 +115,36 @@ export default function DashboradCampaign() {
   
 
   async function fetchData() {
+    await retrieveUserSession();
     await fetchReq();
   }
 
+  async function retrieveUserSession() {
+    try {
+      const session = await EncryptedStorage.getItem('user_session');
 
+      if (session !== undefined) {
+        const parsedSession = JSON.parse(session);
+        setToken(parsedSession.Token);
+      }
+    } catch (error) {
+      console.error('Error retrieving user session:', error);
+    }
+  }
 
   const fetchReq = async () => {
     var URL = 'http://localhost:8081//bloodlife/Api/CampaignApi.php';
 
     var headers = {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${Token}`,
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
     };
 
-    var Data = {
-      
-    };
 
     fetch(URL, {
-      method: 'POST',
+      method: 'GET',
       headers: headers,
-      body: JSON.stringify(Data),
     })
       .then((response) => {
         if (!response.ok) {
@@ -141,7 +153,7 @@ export default function DashboradCampaign() {
         return response.json();
       })
       .then((response) => {
-        if (response.message === 'Request Not Found') {
+        if (response.message === false) {
           setLoader(true);
           setcampArray([]);
         } else {
@@ -150,6 +162,7 @@ export default function DashboradCampaign() {
         }
       })
       .catch((error) => {
+        setLoader(true);
        
       });
   };
@@ -158,7 +171,7 @@ export default function DashboradCampaign() {
     <ScrollView
     refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
   >
-    {loader ? (
+    {loader == true ? (
       <LoadPage />
     ) : (
       <DashboardStructure children1={<Children1 status={status} setstatus={setstatus} district={district} setdistrict={setdistrict} />} children2={<Children2 Data={FilterreqArray} />}></DashboardStructure>

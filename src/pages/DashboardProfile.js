@@ -24,7 +24,7 @@ function Children1({data}) {
   )
 }
 
-function Children2({name,bloodGroup,dob,contactNumber,nic,donationLastDate,availability,medicalReport,}) {
+function Children2({data}) {
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
   const navigation = useNavigation();
@@ -98,7 +98,7 @@ function Children2({name,bloodGroup,dob,contactNumber,nic,donationLastDate,avail
               <Text style={styles.headingText}>Name  </Text>
             </View>
             <View style={styles.contentCon}>
-              <Text style={styles.contentText}>Mohamed Aasath  </Text>
+              <Text style={styles.contentText}>{data.name}</Text>
             </View>
 
           </View>
@@ -107,7 +107,7 @@ function Children2({name,bloodGroup,dob,contactNumber,nic,donationLastDate,avail
               <Text style={styles.headingText}>Contact Number  </Text>
             </View>
             <View style={styles.contentCon}>
-              <Text style={styles.contentText}>0755701765</Text>
+              <Text style={styles.contentText}>{data.contactNumber}</Text>
             </View>
 
           </View>
@@ -117,7 +117,7 @@ function Children2({name,bloodGroup,dob,contactNumber,nic,donationLastDate,avail
               <Text style={styles.headingText}>NIC  </Text>
             </View>
             <View style={styles.contentCon}>
-              <Text style={styles.contentText}>200000000</Text>
+              <Text style={styles.contentText}>{data.nic}</Text>
             </View>
 
           </View>
@@ -127,7 +127,7 @@ function Children2({name,bloodGroup,dob,contactNumber,nic,donationLastDate,avail
               <Text style={styles.headingText}>District  </Text>
             </View>
             <View style={styles.contentCon}>
-              <Text style={styles.contentText}>Ampara</Text>
+              <Text style={styles.contentText}>{data.district}</Text>
             </View>
 
           </View>
@@ -137,7 +137,7 @@ function Children2({name,bloodGroup,dob,contactNumber,nic,donationLastDate,avail
               <Text style={styles.headingText}>Division  </Text>
             </View>
             <View style={styles.contentCon}>
-              <Text style={styles.contentText}>Sainthamaruthu</Text>
+              <Text style={styles.contentText}>{data.division}</Text>
             </View>
 
           </View>
@@ -147,7 +147,27 @@ function Children2({name,bloodGroup,dob,contactNumber,nic,donationLastDate,avail
               <Text style={styles.headingText}>Donation Last Date </Text>
             </View>
             <View style={styles.contentCon}>
-              <Text style={styles.contentText}>2023-08-09</Text>
+              <Text style={styles.contentText}>{data.donationLastDate}</Text>
+            </View>
+
+          </View>
+
+          <View style={{ flexDirection: 'row', }}>
+            <View style={styles.headingCon}>
+              <Text style={styles.headingText}>Blood Group</Text>
+            </View>
+            <View style={styles.contentCon}>
+              <Text style={styles.contentText}>{data.bloodGroup}</Text>
+            </View>
+
+          </View>
+
+          <View style={{ flexDirection: 'row', }}>
+            <View style={styles.headingCon}>
+              <Text style={styles.headingText}>DOB</Text>
+            </View>
+            <View style={styles.contentCon}>
+              <Text style={styles.contentText}>{data.dob}</Text>
             </View>
 
           </View>
@@ -186,10 +206,10 @@ function Children2({name,bloodGroup,dob,contactNumber,nic,donationLastDate,avail
 export default function DashboardProfile() {
 
 
-  const [donorId, setDonorId] = useState('');
+  const [Token, setToken] = useState('');
   const [UserArray, setUserArray] = useState([]);
   const [refreshing, setRefreshing] = React.useState(false);
-  const [loader, setloader] = React.useState(false);
+  const [loader, setloader] = React.useState(true);
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -198,10 +218,10 @@ export default function DashboardProfile() {
   };
 
   useEffect(() => {
-    setRefreshing(true);
+    
     fetchData();
-    setRefreshing(false);
-  }, [donorId]);
+    
+  }, [Token]);
 
 
   async function fetchData() {
@@ -215,7 +235,7 @@ export default function DashboardProfile() {
 
       if (session !== undefined) {
         const parsedSession = JSON.parse(session);
-        setDonorId(parsedSession.donorId);
+        setToken(parsedSession.Token);
        
       }
     } catch (error) {
@@ -229,19 +249,16 @@ export default function DashboardProfile() {
     var URL = "http://localhost:8081//bloodlife/Api/DonorApi.php";
 
     var headers = {
+      'Authorization': `Bearer ${Token}`,
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     };
 
-    var Data = {
-      donorId: donorId,
-
-    };
 
     fetch(URL, {
-      method: 'POST',
+      method: 'GET',
       headers: headers,
-      body: JSON.stringify(Data)
+      
     })
       .then((response) => {
         if (!response.ok) {
@@ -250,10 +267,11 @@ export default function DashboardProfile() {
       return response.json();
       })
       .then((response) => {
-        if (response.message == "Request Not Found") {
+        if (response.message == false) {
           setloader(true);
           setUserArray("");
       } else {
+          console.log(response);
           setUserArray(response);
           setloader(false);
 
@@ -280,7 +298,7 @@ export default function DashboardProfile() {
                     <LoadPage></LoadPage>
                     </>
                 ) : (
-                  <DashboardStructure children1={<Children1 data={UserArray} />} children2={<Children2 />}></DashboardStructure>
+                  <DashboardStructure children1={<Children1 data={UserArray} />} children2={<Children2 data={UserArray} />}></DashboardStructure>
                 )}
 
             </ScrollView>
@@ -312,7 +330,7 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: 'flex-start',
     justifyContent: 'center',
-    paddingLeft: 30
+    paddingLeft: 10
   },
 
   headingText: {
@@ -324,9 +342,9 @@ const styles = StyleSheet.create({
   contentCon: {
     flex: 5,
     height: 50,
-    alignItems: 'flex-start',
+    alignItems: 'flex-end',
     justifyContent: 'center',
-    paddingLeft: 20,
+    paddingRight: 10,
   },
 
   contentText: {

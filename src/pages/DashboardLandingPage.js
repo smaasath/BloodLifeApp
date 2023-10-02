@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, RefreshControl} from 'react-native'
+import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, RefreshControl } from 'react-native'
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import DashboardStructure from '../components/DashboardStructure';
@@ -114,26 +114,31 @@ function Children2({ Data }) {
 
 export default function DashboardLandingPage() {
 
-    
+
 
 
     const [Token, setToken] = useState('');
     const [UserArray, setUserArray] = useState([]);
     const [ReqArray, setReqArray] = useState([]);
     const [refreshing, setRefreshing] = React.useState(false);
-    const [loader, setloader] = React.useState(false);
+    const [loader, setloader] = React.useState(true);
 
     const onRefresh = async () => {
+        
         setRefreshing(true);
         await fetchData();
         setRefreshing(false);
-      };
+       
+    };
+
+
+
 
 
     useEffect(() => {
-        setRefreshing(true);
+
         fetchData();
-        setRefreshing(false);
+        
     }, [Token]);
 
 
@@ -152,8 +157,8 @@ export default function DashboardLandingPage() {
             if (session !== undefined) {
                 const parsedSession = JSON.parse(session);
                 setToken(parsedSession.Token);
-                
-                
+
+
             }
         } catch (error) {
             console.error("Error retrieving user session:", error);
@@ -175,7 +180,7 @@ export default function DashboardLandingPage() {
 
         fetch(URL, {
             method: 'GET',
-            headers: headers,        
+            headers: headers,
         })
             .then((response) => {
                 if (!response.ok) {
@@ -211,13 +216,13 @@ export default function DashboardLandingPage() {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         };
-        
-  
+
+
 
         fetch(URL, {
             method: 'GET',
-            headers: headers,        
-           
+            headers: headers,
+
         })
             .then((response) => {
                 if (!response.ok) {
@@ -249,7 +254,7 @@ export default function DashboardLandingPage() {
 
 
 
-    
+
     return (
         <>
 
@@ -258,9 +263,9 @@ export default function DashboardLandingPage() {
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                 }>
                 {loader == true ? (
-                    <>
-                    <LoadPage></LoadPage>
-                    </>
+
+                    <LoadPage />
+
                 ) : (
                     <DashboardStructure
                         children1={<Children1 date={UserArray.donationLastDate} />}

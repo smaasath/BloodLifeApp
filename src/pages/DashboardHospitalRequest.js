@@ -56,7 +56,7 @@ export default function DashboardHospitalRequest() {
   const [Token, setToken] = useState('');
   const [reqArray, setReqArray] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-  const [loader, setLoader] = useState(false);
+  const [loader, setLoader] = useState(true);
   const [FilterreqArray, setFilterreqArray] = useState([]);
   const [status, setstatus] = useState("All");
 
