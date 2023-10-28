@@ -1,56 +1,43 @@
-import { StyleSheet, Text, View ,TextInput,} from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
 import React, { useState } from 'react';
+import { TextInput } from 'react-native-paper';
+import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
 
 
-const InputTextCon = ({ onChangeText, placeholder,value,password}) => {
-
-  const [isFocused, setIsFocused] = useState(false);
-    const handleFocus = () => {
-        setIsFocused(true);
-      };
-    
-      const handleBlur = () => {
-        setIsFocused(false);
-      };
-    
-      const inputBorderColor = isFocused ? '#2E86C1' : 'gray';
-
-
-      
+const InputTextCon = ({ value, label, url,onChangeText,inputMode,maxLength }) => {
 
 
   return (
-    
-     <TextInput
-                      style={[styles.input,{ borderColor: inputBorderColor }]}
-                      placeholder={placeholder}
-                      placeholderTextColor="#000"
-                      value={value}
-                      onChangeText={onChangeText}
-                      onFocus={handleFocus}
-                      onBlur={handleBlur}
-                      secureTextEntry={password}
-                      
-                    />
-  
+    <>
+
+
+      <TextInput
+        mode="outlined"
+        label={label}
+        value={value}
+        onChangeText={onChangeText}
+        activeOutlineColor="black"
+        outlineColor='#2C3E50'
+        inputMode={inputMode}
+        maxLength={maxLength}
+        left={
+          <TextInput.Icon
+            icon={() => (
+              <Image
+                source={{ uri: url }}
+                style={{ height: 20, width: 20 }}
+              />
+            )}
+          />
+        }
+
+      />
+    </>
   )
 }
 
-const styles = StyleSheet.create({ 
-    
-    input: {
-    width: '95%',
-    height: 55,
-    borderWidth: 1,
-    borderColor: 'gray',
-    borderRadius: 10,
-    marginBottom: 10,
-    paddingLeft: 10,
-    backgroundColor: '#EFEFEF',
-    color: '#000',
-  },
+const styles = StyleSheet.create({
 
-  
 
 })
 

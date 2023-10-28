@@ -122,7 +122,6 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "flex-start",
         justifyContent: "flex-start",
-        marginLeft: 20,
         marginTop: 50,
     
       },

@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity, Switch, isEnabled, toggleSwitch,ScrollView,RefreshControl } from 'react-native'
-import React, { useState ,useEffect} from 'react';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Switch, isEnabled, toggleSwitch, ScrollView, RefreshControl } from 'react-native'
+import React, { useState, useEffect } from 'react';
 import DashboardStructure from '../components/DashboardStructure'
 import { useNavigation } from '@react-navigation/native';
 import EncryptedStorage from 'react-native-encrypted-storage';
@@ -7,16 +7,16 @@ import LoadPage from '../components/LoadPage';
 
 
 
-function Children1({data}) {
+function Children1({ data }) {
   return (
     <>
       <View style={{ zIndex: 1, marginTop: 30, marginBottom: -75, alignItems: 'center' }}>
-        <Image  source={
-    data.image
-      ? { uri: `data:image/jpeg;base64,${data.image}` }
-      : require('../../assets/testuser.png')
-  }
-   style={{ height: 150, width: 150, borderRadius: 90 }}></Image>
+        <Image source={
+          data.image
+            ? { uri: `data:image/jpeg;base64,${data.image}` }
+            : require('../../assets/testuser.png')
+        }
+          style={{ height: 150, width: 150, borderRadius: 90 }}></Image>
 
       </View>
 
@@ -24,10 +24,17 @@ function Children1({data}) {
   )
 }
 
-function Children2({data}) {
-  const [isEnabled, setIsEnabled] = useState(false);
+function Children2({ data }) {
+  const [isEnabled, setIsEnabled] = useState();
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
   const navigation = useNavigation();
+
+
+  const navToEdit = () => {
+    navigation.navigate("EditProfile");
+    console.log("ko");
+  };
+
   const logout = async () => {
     try {
       await clearStorage();
@@ -89,11 +96,11 @@ function Children2({data}) {
           <Text style={styles.contentText}>Details</Text>
         </View>
         <View style={styles.bigCon}>
-          <View style={{ alignItems: 'flex-end' }}>
-            <TouchableOpacity><Image source={require('../../assets/account-edit.png')} style={{ height: 30, width: 30, borderRadius: 90, }}></Image></TouchableOpacity>
+          <View style={styles.contentCon}>
+            <TouchableOpacity onPress={navToEdit}><Text style={{ ...styles.contentText, color: "blue", fontSize: 15 }}>Edit</Text></TouchableOpacity>
           </View>
 
-          <View style={{ flexDirection: 'row', }}>
+          <View style={styles.boderstyle}>
             <View style={styles.headingCon}>
               <Text style={styles.headingText}>Name  </Text>
             </View>
@@ -102,7 +109,7 @@ function Children2({data}) {
             </View>
 
           </View>
-          <View style={{ flexDirection: 'row', }}>
+          <View style={styles.boderstyle}>
             <View style={styles.headingCon}>
               <Text style={styles.headingText}>Contact Number  </Text>
             </View>
@@ -112,7 +119,7 @@ function Children2({data}) {
 
           </View>
 
-          <View style={{ flexDirection: 'row', }}>
+          <View style={styles.boderstyle}>
             <View style={styles.headingCon}>
               <Text style={styles.headingText}>NIC  </Text>
             </View>
@@ -122,7 +129,7 @@ function Children2({data}) {
 
           </View>
 
-          <View style={{ flexDirection: 'row', }}>
+          <View style={styles.boderstyle}>
             <View style={styles.headingCon}>
               <Text style={styles.headingText}>District  </Text>
             </View>
@@ -132,7 +139,7 @@ function Children2({data}) {
 
           </View>
 
-          <View style={{ flexDirection: 'row', }}>
+          <View style={styles.boderstyle}>
             <View style={styles.headingCon}>
               <Text style={styles.headingText}>Division  </Text>
             </View>
@@ -142,7 +149,7 @@ function Children2({data}) {
 
           </View>
 
-          <View style={{ flexDirection: 'row', }}>
+          <View style={styles.boderstyle}>
             <View style={styles.headingCon}>
               <Text style={styles.headingText}>Donation Last Date </Text>
             </View>
@@ -152,7 +159,7 @@ function Children2({data}) {
 
           </View>
 
-          <View style={{ flexDirection: 'row', }}>
+          <View style={styles.boderstyle}>
             <View style={styles.headingCon}>
               <Text style={styles.headingText}>Blood Group</Text>
             </View>
@@ -173,6 +180,33 @@ function Children2({data}) {
           </View>
         </View>
 
+
+        
+        <View style={{ paddingLeft: 25, }}>
+          <Text style={styles.contentText}>Medical</Text>
+        </View>
+
+        <View style={styles.bigCon}>
+          <View style={{ flexDirection: 'row', }}>
+            <View style={styles.headingCon}>
+              <Text style={styles.headingText}>Medical Report</Text>
+            </View>
+            <View style={{ ...styles.contentCon, alignItems: 'flex-end',}}>
+
+              <TouchableOpacity
+                
+              >
+                <Image source={require('../../assets/icons8-view-90.png')} style={{ height: 40, width: 40, borderRadius: 90, }}>
+                </Image>
+              </TouchableOpacity>
+
+            </View>
+
+          </View>
+        </View>
+
+        
+
         <View style={{ paddingLeft: 25, }}>
           <Text style={styles.contentText}>Logout</Text>
         </View>
@@ -182,7 +216,7 @@ function Children2({data}) {
             <View style={styles.headingCon}>
               <Text style={styles.headingText}>Logout</Text>
             </View>
-            <View style={{ ...styles.contentCon, alignItems: 'flex-end', marginRight: 50, }}>
+            <View style={{ ...styles.contentCon, alignItems: 'flex-end',}}>
 
               <TouchableOpacity
                 onPress={logout}
@@ -218,16 +252,16 @@ export default function DashboardProfile() {
   };
 
   useEffect(() => {
-    
+
     fetchData();
-    
+
   }, [Token]);
 
 
   async function fetchData() {
     await retrieveUserSession();
     await fetchUser();
-  
+
   }
   async function retrieveUserSession() {
     try {
@@ -236,7 +270,7 @@ export default function DashboardProfile() {
       if (session !== undefined) {
         const parsedSession = JSON.parse(session);
         setToken(parsedSession.Token);
-       
+
       }
     } catch (error) {
       console.error("Error retrieving user session:", error);
@@ -258,24 +292,24 @@ export default function DashboardProfile() {
     fetch(URL, {
       method: 'GET',
       headers: headers,
-      
+
     })
       .then((response) => {
         if (!response.ok) {
           setloader(true);
-      }
-      return response.json();
+        }
+        return response.json();
       })
       .then((response) => {
         if (response.message == false) {
           setloader(true);
           setUserArray("");
-      } else {
-          console.log(response);
+        } else {
+         
           setUserArray(response);
           setloader(false);
 
-      }
+        }
 
 
 
@@ -289,20 +323,20 @@ export default function DashboardProfile() {
   return (
     <>
 
-<ScrollView
-                refreshControl={
-                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-                }>
-                {loader == true ? (
-                    <>
-                    <LoadPage></LoadPage>
-                    </>
-                ) : (
-                  <DashboardStructure children1={<Children1 data={UserArray} />} children2={<Children2 data={UserArray} />}></DashboardStructure>
-                )}
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
+        {loader == true ? (
+          <>
+            <LoadPage></LoadPage>
+          </>
+        ) : (
+          <DashboardStructure children1={<Children1 data={UserArray} />} children2={<Children2 data={UserArray} />}></DashboardStructure>
+        )}
 
-            </ScrollView>
-     
+      </ScrollView>
+
 
     </>
   )
@@ -352,4 +386,11 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: 'bold'
   },
+
+  boderstyle: {
+    flexDirection: 'row',
+    borderWidth: 0,
+    borderBottomWidth: 0.2,
+    borderBottomColor: "#85929E"
+  }
 })

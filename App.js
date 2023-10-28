@@ -17,6 +17,8 @@ import ForgotPassword3 from './src/pages/ForgotPassword3';
 import ForgotPassword4 from './src/pages/ForgotPassword4';
 import Certificate from './src/pages/Certificate';
 import QrMain from './src/pages/QrMain';
+import EditProfile from './src/pages/EditProfile';
+import DonorRegister from './src/pages/DonorRegister';
 
 
 
@@ -40,6 +42,8 @@ function App() {
         <Stack.Screen name="ForgotPassword4" component={ForgotPassword4} options={{ headerShown: false }} />
         <Stack.Screen name="Certificate" component={Certificate}/>
         <Stack.Screen name="QrMain" component={QrMain}/>
+        <Stack.Screen name="EditProfile" component={EditProfile}/>
+        <Stack.Screen name="DonorRegister" component={DonorRegister} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
