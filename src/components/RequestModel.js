@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import Modal from "react-native-modal";
 import { useNavigation } from '@react-navigation/native';
-import flex from "./flex";
+
 
 function RequestModel({ isModalVisible, toggleModal, status, BloodQuntity, RequestID, RequestDate, RequestHospital, location, bloodBankName, bloodGroup }) {
   const navigation = useNavigation();

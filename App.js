@@ -1,9 +1,4 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+
 
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
@@ -19,6 +14,9 @@ import Certificate from './src/pages/Certificate';
 import QrMain from './src/pages/QrMain';
 import EditProfile from './src/pages/EditProfile';
 import DonorRegister from './src/pages/DonorRegister';
+import { Provider } from 'react-redux';
+import { Store } from './src/Redux/Store';
+
 
 
 
@@ -31,21 +29,25 @@ const Stack = createNativeStackNavigator();
 
 function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
-        <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-        <Stack.Screen name="Dashboard" component={Dashboard} options={{ headerShown: false }} />
-        <Stack.Screen name="forgotPassword1" component={ForgotPassword1} options={{ headerShown: false }} />
-        <Stack.Screen name="ForgotPassword2" component={ForgotPassword2} options={{ headerShown: false }} />
-        <Stack.Screen name="ForgotPassword3" component={ForgotPassword3} options={{ headerShown: false }} />
-        <Stack.Screen name="ForgotPassword4" component={ForgotPassword4} options={{ headerShown: false }} />
-        <Stack.Screen name="Certificate" component={Certificate}/>
-        <Stack.Screen name="QrMain" component={QrMain}/>
-        <Stack.Screen name="EditProfile" component={EditProfile}/>
-        <Stack.Screen name="DonorRegister" component={DonorRegister} options={{ headerShown: false }} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <>
+    <Provider store={Store}>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
+          <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+          <Stack.Screen name="Dashboard" component={Dashboard} options={{ headerShown: false }} />
+          <Stack.Screen name="forgotPassword1" component={ForgotPassword1} options={{ headerShown: false }} />
+          <Stack.Screen name="ForgotPassword2" component={ForgotPassword2} options={{ headerShown: false }} />
+          <Stack.Screen name="ForgotPassword3" component={ForgotPassword3} options={{ headerShown: false }} />
+          <Stack.Screen name="ForgotPassword4" component={ForgotPassword4} options={{ headerShown: false }} />
+          <Stack.Screen name="Certificate" component={Certificate} />
+          <Stack.Screen name="QrMain" component={QrMain} />
+          <Stack.Screen name="EditProfile" component={EditProfile} />
+          <Stack.Screen name="DonorRegister" component={DonorRegister} options={{ headerShown: false }} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
+    </>
   );
 }
 

@@ -3,12 +3,11 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import LoginStructure from '../components/LoginStructure';
-import InputTextCon from '../components/inputTextCon';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import { fetchData } from '../services/FetchLogin';
 import { TextInput } from 'react-native-paper';
 import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
-import InputConPassword from '../components/InputConPassword';
+import InputField from '../components/InputField';
 
 
 
@@ -118,7 +117,7 @@ export default function Login() {
 
     const gmailRegex = /^[a-zA-Z0-9]+@gmail\.com$/;
 
-   // Validate Email
+    // Validate Email
     if (username === '' || !gmailRegex.test(username)) {
       seterrorMessageUser('Email is Required');
     }
@@ -143,35 +142,32 @@ export default function Login() {
     <LoginStructure>
 
 
-      <View style={{ width: "100%", padding: 10, }} >
+      <View>
 
-        <InputTextCon
+        <InputField
           onChangeText={(text) => setUsername(text)}
-          label={"Email"}
-          value={username}
+          placeholder={"Email"}
           inputMode={"email"}
           url={"https://img.icons8.com/ios-filled/50/gmail.png"}
-        />
+        >
 
-        <Text style={{ color: "red" }}>{errorMessageUser}</Text>
-        <View style={styles.breakElement} />
-
-        <View style={styles.break} />
+        </InputField>
 
 
-        <InputConPassword
-          label="Password"
+        <Text style={{ color: "red",paddingLeft:25 }}>{errorMessageUser}</Text>
+  
+
+        <InputField
+          placeholder="Password"
           onChangeText={(text) => setPassword(text)}
-          value={password}
+          secureTextEntry={true}
+          url={"https://img.icons8.com/ios-glyphs/30/password.png"}
+          inputMode={"text"}
+        >
+        </InputField>
+ 
 
-        />
-
-        <Text style={{ color: "red" }}>{errorMessagePassword}</Text>
-        <View style={styles.breakElement} />
-
-        <View style={styles.buttonelement}>
-          <TouchableOpacity onPress={vaitation} style={styles.logbutton} ><Text style={{ color: '#fff', fontSize: 14, fontWeight: 500, }}>Login</Text></TouchableOpacity>
-        </View>
+        <Text style={{ color: "red",paddingLeft:25 }}>{errorMessagePassword}</Text>
 
         <View style={styles.breakElement} />
         <View style={{ width: '95%', flexDirection: 'row' }}>
@@ -180,12 +176,18 @@ export default function Login() {
           </View>
         </View>
 
+        <View style={styles.buttonelement}>
+          <TouchableOpacity onPress={vaitation} style={styles.logbutton} ><Text style={{ color: '#fff', fontSize: 14, fontWeight: 500, }}>Login</Text></TouchableOpacity>
+        </View>
+
+    
+
 
         <View style={styles.breakbottom} />
 
 
         <View style={{ width: '100%', flexDirection: 'row' }}>
-          <View style={{ flex: 1, alignItems: "center",justifyContent:"center"}}>
+          <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
             <Text style={{ color: 'black', textAlign: 'right', fontSize: 15 }}>Didn't have an Account?  <Text onPress={navRegister} style={{ color: 'green', textAlign: 'right', }}>Sign Up</Text></Text>
           </View>
         </View>
@@ -208,7 +210,7 @@ const styles = StyleSheet.create({
 
   logbutton: {
     backgroundColor: '#BD1616',
-    width: "100%",
+    width: "30%",
     height: 38,
     borderRadius: 20,
     justifyContent: "center",
@@ -228,15 +230,15 @@ const styles = StyleSheet.create({
   },
 
   breakbottom: {
-    height: 130,
+    height: 70,
   },
 
   buttonelement: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    width: '100%',
+    justifyContent: "flex-end",
     zIndex: 10,
+    padding:25,
   },
 
 });

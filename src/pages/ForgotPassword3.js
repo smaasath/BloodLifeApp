@@ -2,7 +2,8 @@ import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, Alert } fro
 import React, { useState } from 'react';
 import LoginStructure from '../components/LoginStructure'
 import { useNavigation } from '@react-navigation/native';
-import InputTextCon from '../components/inputTextCon';
+import InputField from '../components/InputField';
+
 
 
 
@@ -62,22 +63,30 @@ export default function ForgotPassword3() {
 
             <View style={styles.break} />
 
-            <InputTextCon
-                onChangeText={handleNewPasswordChange}
-                placeholder="New Password"
-                value={newPassword}
-                password={true}
 
-            />
+            <InputField
+              onChangeText={handleNewPasswordChange}
+              placeholder={"Password"}
+              url={"https://img.icons8.com/ios-glyphs/30/password.png"}
+              inputMode={"text"}
+              secureTextEntry={true}
+
+            ></InputField>
+
 
             <View style={styles.break} />
-            <InputTextCon
-                onChangeText={handleConfirmPasswordChange}
-                placeholder="Confirm Password"
-                value={confirmPassword}
-                password={true}
 
-            />
+            <InputField
+              onChangeText={handleConfirmPasswordChange}
+              placeholder={"Confirm Password"}
+              url={"https://img.icons8.com/ios-glyphs/30/password.png"}
+              inputMode={"text"}
+              secureTextEntry={true}
+
+            ></InputField>
+
+
+            
             {confirmPassword !== '' && !passwordsMatch && (
                 <Text style={{ color: 'red' }}>Passwords do not match.</Text>
             )}

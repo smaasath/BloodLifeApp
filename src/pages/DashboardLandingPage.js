@@ -40,10 +40,8 @@ function subtractLocalDateFromEnteredDate(enteredDateString) {
 function checkNumberSign(number) {
     if (number > 0) {
         return true; // Positive
-    } else if (number < 0) {
+    } else if (number <= 0) {
         return false; // Negative
-    } else {
-        return false; // Zero
     }
 }
 
@@ -175,8 +173,6 @@ export default function DashboardLandingPage() {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         };
-
-
 
         fetch(URL, {
             method: 'GET',

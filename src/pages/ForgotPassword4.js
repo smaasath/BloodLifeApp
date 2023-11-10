@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import LoginStructure from '../components/LoginStructure';
-import InputTextCon from '../components/inputTextCon';
+
 
 
 

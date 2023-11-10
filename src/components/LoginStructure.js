@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
       },
     
       row4: {
-        backgroundColor: "#fff",
+        backgroundColor: "#F2F3F4",
         flex: 3,
         flexDirection: "row",
         borderTopRightRadius: 40,
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
       },
     
       rowimage: {
-        backgroundColor: "#fff",
+        backgroundColor: "#F2F3F4",
         flex: 1,
         flexDirection: "row",
     

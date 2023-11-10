@@ -1,7 +1,8 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput,Alert } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, Alert } from 'react-native'
 import React, { useState } from 'react';
 import LoginStructure from '../components/LoginStructure'
 import { useNavigation } from '@react-navigation/native';
+import InputField from '../components/InputField';
 
 
 
@@ -15,8 +16,8 @@ export default function ForgotPassword1() {
 
     const navForgotPass2 = () => {
         navigation.navigate('ForgotPassword2')
-    
-      }
+
+    }
 
     const handleEmailValidation = () => {
         // Regular expression for email validation
@@ -45,19 +46,20 @@ export default function ForgotPassword1() {
 
             <View style={styles.break} />
 
-            <TextInput
-                style={styles.input}
-                placeholder="Enter your email"
-                placeholderTextColor="#000"
-                value={email}
+            <InputField
                 onChangeText={(text) => setEmail(text)}
-                keyboardType="email-address"
-            />
-             
-             <View style={styles.break} /> 
+                placeholder={"Email"}
+                url={"https://img.icons8.com/ios-filled/50/gmail.png"}
+                inputMode={"email"}
+            >
+
+            </InputField>
+
+
+            <View style={styles.break} />
             <View style={styles.break} />
             <View style={styles.buttonelement}>
-            <TouchableOpacity onPress={handleEmailValidation} style={styles.logbutton} ><Text style={{ color: '#fff', fontSize: 14, fontWeight: 500, }}>Next</Text></TouchableOpacity>
+                <TouchableOpacity onPress={handleEmailValidation} style={styles.logbutton} ><Text style={{ color: '#fff', fontSize: 14, fontWeight: 500, }}>Next</Text></TouchableOpacity>
             </View>
 
         </LoginStructure>
@@ -108,16 +110,16 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         justifyContent: "center",
         alignItems: "center",
-    
-    
-    
-      },
 
-      buttonelement: {
+
+
+    },
+
+    buttonelement: {
 
         alignItems: "flex-end",
         width: '100%',
         zIndex: 10,
-       marginLeft: -10,
-      },
+        marginLeft: -10,
+    },
 })

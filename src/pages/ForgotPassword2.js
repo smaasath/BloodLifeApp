@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, Alert } fro
 import React, { useState } from 'react';
 import LoginStructure from '../components/LoginStructure'
 import { useNavigation } from '@react-navigation/native';
+import InputField from '../components/InputField';
 
 
 
@@ -46,14 +47,16 @@ export default function ForgotPassword1() {
 
             <View style={styles.break} />
 
-            <TextInput
-                style={styles.input}
-                placeholder="Ender Your Code"
-                placeholderTextColor="#000"
-                value={code}
-                onChangeText={(text) => setCode(text)}
-                keyboardType="number-pad"
-            />
+            <InputField
+             onChangeText={(text) => setCode(text)}
+             placeholder={"Enter Your Code"}
+             inputMode={"numeric"}
+             url={"https://img.icons8.com/ios-glyphs/30/video-id-verification.png"}
+            
+            >
+            
+            </InputField>
+
 
             <View style={styles.break} />
             <View style={styles.break} />
