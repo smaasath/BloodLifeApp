@@ -15,6 +15,8 @@ import LoadPage from '../components/LoadPage';
 
 
 function subtractLocalDateFromEnteredDate(enteredDateString) {
+
+    if(enteredDateString != null){
     // Convert the entered date string to a Date object
     const enteredDate = new Date(enteredDateString);
 
@@ -34,6 +36,9 @@ function subtractLocalDateFromEnteredDate(enteredDateString) {
     const differenceInDays = differenceInMilliseconds / (1000 * 60 * 60 * 24);
 
     return Math.round(differenceInDays);
+    }else{
+        return 0;
+    }
 }
 
 

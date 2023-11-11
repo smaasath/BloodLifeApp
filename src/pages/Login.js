@@ -44,7 +44,7 @@ export default function Login() {
     })
       .then((response) => {
         if (!response.ok) {
-          alert("Something Went Wrong !! Try Again");
+          alert("Something Went Wrong !! Try Again1");
         }
         return response.json();
       })
@@ -54,7 +54,7 @@ export default function Login() {
 
       })
       .catch((error) => {
-        alert("Something Went Wrong !! Try Again");
+        alert("Something Went Wrong !! Try Again2");
       });
   };
 

@@ -26,10 +26,10 @@ export const setPhoneNumber = phoneNumber => dispatch => {
     });
 };
 
-export const setDOB = DOB => dispatch => {
+export const setDOB = dob => dispatch => {
     dispatch({
         type: SET_USER_DOB,
-        payload: DOB,
+        payload: dob,
     });
 };
 

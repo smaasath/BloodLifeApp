@@ -34,9 +34,9 @@ export default function ForgotPassword4() {
                 <View style={styles.break} />
                 <View style={styles.break} />
                 <View style={{ width: '100%', alignItems: 'center' }}>
-                    <Text style={styles.forgetText}>Password Changed!</Text>
+                    <Text style={styles.forgetText}>Registered Success!</Text>
                     <View style={styles.break} />
-                    <Text style={styles.forgetTextnormal}>Your password has been changed successfully.</Text>
+                    <Text style={styles.forgetTextnormal}>Your Account has been created successfully.</Text>
                 </View>
                 <View style={styles.break} />
                 <View style={styles.break} />

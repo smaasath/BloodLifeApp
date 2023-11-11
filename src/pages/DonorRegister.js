@@ -9,7 +9,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setBloodBank, setDOB, setDistrict, setDivition, setEmail, setEmailCode, setNIC, setName, setPassword, setPhoneNumber, setConfirmPassword } from '../Redux/Action/RegisterAction'
 import fetchLocation from '../services/fetchLocation'
 import fetchBloodBank from '../services/fetchBloodBank'
-import { validateSriLankanNIC, emptyValueValidate, ValidateEmail, ValidateContactNumber, ValidatePassword, ValidateConfirmPassword ,tostMessage} from '../services/Validations'
+import { validateSriLankanNIC, emptyValueValidate, ValidateEmail, ValidateContactNumber, ValidatePassword, ValidateConfirmPassword, tostMessage } from '../services/Validations'
+import VerificationCode from '../services/VerificationCode'
+
 
 
 
@@ -126,7 +128,7 @@ export default function DonorRegister() {
 
   const validation = () => {
     let status = '';
-  
+
     const isAllFieldsFilled =
       emptyValueValidate(name) &&
       emptyValueValidate(phoneNumber) &&
@@ -138,7 +140,7 @@ export default function DonorRegister() {
       emptyValueValidate(password) &&
       emptyValueValidate(confirmPassword) &&
       emptyValueValidate(bloodbank);
-  
+
     if (isAllFieldsFilled) {
       if (
         ValidateEmail(email) &&
@@ -147,25 +149,26 @@ export default function DonorRegister() {
         ValidateConfirmPassword(password, confirmPassword) &&
         validateSriLankanNIC(nic)
       ) {
-        tostMessage("success");
+verifyGmail();
+
       } else {
         status =
           !ValidateEmail(email)
             ? 'Invalid Email'
             : !ValidateContactNumber(phoneNumber)
-            ? 'Invalid Contact Number'
-            : !ValidatePassword(password)
-            ? 'Password must contain 6 Letters eg: Adt$3!@#'
-            : !ValidateConfirmPassword(password, confirmPassword)
-            ? 'Passwords do not match'
-            : !validateSriLankanNIC(nic)
-            ? 'NIC not Valid'
-            : 'Invalid';
+              ? 'Invalid Contact Number'
+              : !ValidatePassword(password)
+                ? 'Password must contain 6 Letters eg: Adt$3!@#'
+                : !ValidateConfirmPassword(password, confirmPassword)
+                  ? 'Passwords do not match'
+                  : !validateSriLankanNIC(nic)
+                    ? 'NIC not Valid'
+                    : 'Invalid';
       }
     } else {
       status = 'All Fields Need to Fill';
     }
-  
+
     if (status) {
       tostMessage(status);
     }
@@ -173,6 +176,27 @@ export default function DonorRegister() {
 
   const navTologin = () => {
     navigation.navigate("Login");
+
+  };
+
+  const verifyGmail = async () => {
+    try {
+      const data = await VerificationCode(email);
+
+      if (data.message === true) {
+        dispatch(setEmailCode(data.otp));
+        navToVerifyCode();
+      } else {
+        tostMessage(data.message);
+      }
+    } catch (error) {
+      console.error('Error fetching verification code:', error);
+    }
+  };
+
+
+  const navToVerifyCode= () => {
+    navigation.navigate('ForgotPassword2')
 
   };
 
@@ -222,7 +246,7 @@ export default function DonorRegister() {
               {/*Date Input */}
               <TouchableOpacity onPress={() => setOpen(true)}>
                 <View style={{ width: 110, height: 40, alignItems: "center", justifyContent: "center" }}>
-                  <Text style={{ color: "black" }}>{dob != "" ? dob : "dob"}</Text>
+                  <Text style={{ color: "black" }}>{dob != "" ? dob.toLocaleDateString('en-US', "yyyy-mm-dd") : "dob"}</Text>
                 </View>
               </TouchableOpacity>
 
@@ -236,6 +260,7 @@ export default function DonorRegister() {
                 onConfirm={(date) => {
                   setOpen(false)
                   setDOB(date)
+                  console.log(date)
                 }}
                 onCancel={() => {
                   setOpen(false)
