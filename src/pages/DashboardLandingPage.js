@@ -3,11 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import DashboardStructure from '../components/DashboardStructure';
 import BloodBankRequest from '../components/BloodBankRequest';
-import EncryptedStorage from 'react-native-encrypted-storage';
 import LoadPage from '../components/LoadPage';
-
-
-
+import { useSelector, useDispatch } from 'react-redux';
+import { setUserArray , setRequestArray} from '../Redux/Action/RegisterAction';
+import fetchUser from '../services/fetchUser';
+import { tostMessage } from '../services/Validations';
+import fetchReq from '../services/fetchReq';
 
 
 
@@ -16,27 +17,27 @@ import LoadPage from '../components/LoadPage';
 
 function subtractLocalDateFromEnteredDate(enteredDateString) {
 
-    if(enteredDateString != null){
-    // Convert the entered date string to a Date object
-    const enteredDate = new Date(enteredDateString);
+    if (enteredDateString != null) {
+        // Convert the entered date string to a Date object
+        const enteredDate = new Date(enteredDateString);
 
-    // Get the current local date
-    const now = new Date();
-    const localYear = now.getFullYear();
-    const localMonth = now.getMonth() + 1; // Months are zero-based, so add 1
-    const localDay = now.getDate();
+        // Get the current local date
+        const now = new Date();
+        const localYear = now.getFullYear();
+        const localMonth = now.getMonth() + 1; // Months are zero-based, so add 1
+        const localDay = now.getDate();
 
-    // Create a Date object for the local date
-    const localDate = new Date(localYear, localMonth - 1, localDay); // Months are zero-based, so subtract 1 from the month
+        // Create a Date object for the local date
+        const localDate = new Date(localYear, localMonth - 1, localDay); // Months are zero-based, so subtract 1 from the month
 
-    // Calculate the difference in milliseconds
-    const differenceInMilliseconds = enteredDate - localDate + 1.051e+10;
+        // Calculate the difference in milliseconds
+        const differenceInMilliseconds = enteredDate - localDate + 1.051e+10;
 
-    // Convert milliseconds to days
-    const differenceInDays = differenceInMilliseconds / (1000 * 60 * 60 * 24);
+        // Convert milliseconds to days
+        const differenceInDays = differenceInMilliseconds / (1000 * 60 * 60 * 24);
 
-    return Math.round(differenceInDays);
-    }else{
+        return Math.round(differenceInDays);
+    } else {
         return 0;
     }
 }
@@ -117,135 +118,83 @@ function Children2({ Data }) {
 
 export default function DashboardLandingPage() {
 
+    const { Token, UserArray, RequestArray } = useSelector(state => state.RegisterReducer);
+    const dispatch = useDispatch();
 
-
-
-    const [Token, setToken] = useState('');
-    const [UserArray, setUserArray] = useState([]);
-    const [ReqArray, setReqArray] = useState([]);
     const [refreshing, setRefreshing] = React.useState(false);
     const [loader, setloader] = React.useState(true);
 
+    const navigation = useNavigation();
+
+    const navToLogin = () => {
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'Login' }],
+        });
+    };
+
     const onRefresh = async () => {
-        
+
         setRefreshing(true);
         await fetchData();
         setRefreshing(false);
-       
+
     };
-
-
-
 
 
     useEffect(() => {
 
         fetchData();
-        
-    }, [Token]);
+
+    }, []);
 
 
     async function fetchData() {
-
-        await retrieveUserSession();
-        await fetchUser();
-        await fetchReq();
+        setloader(true);
+        await fetchUserDetail();
+        await fetchReqest();
+        setloader(false);
 
     }
 
-    async function retrieveUserSession() {
+
+    const fetchUserDetail = async () => {
+
+
         try {
-            const session = await EncryptedStorage.getItem("user_session");
+            const data = await fetchUser(Token);
 
-            if (session !== undefined) {
-                const parsedSession = JSON.parse(session);
-                setToken(parsedSession.Token);
-
-
+            if (data.message === true) {
+                dispatch(setUserArray(data));
+            } else if (data.message === "Invalid Token") {
+                navToLogin();
+            } else {
+                tostMessage(data.message || "Unknown error");
             }
         } catch (error) {
-            console.error("Error retrieving user session:", error);
+            console.error('Error fetching verification code:', error);
         }
-    }
 
-    const fetchUser = async () => {
-
-
-        var URL = "http://localhost:8081//bloodlife/Api/DonorApi.php";
-
-        var headers = {
-            'Authorization': `Bearer ${Token}`,
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        };
-
-        fetch(URL, {
-            method: 'GET',
-            headers: headers,
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    setloader(true);
-                }
-                return response.json();
-            })
-            .then((response) => {
-                if (response.message == false) {
-                    setloader(true);
-                    setUserArray("");
-                } else {
-                    setUserArray(response);
-                    setloader(false);
-
-                }
-
-
-
-            })
-            .catch((error) => {
-                setloader(true);
-            });
     };
 
 
-    const fetchReq = async () => {
+    const fetchReqest = async () => {
 
-        var URL = "http://localhost:8081//bloodlife/Api/BloodBankRequestApi.php";
+        try {
+            const data = await fetchReq(Token);
 
-        var headers = {
-            'Authorization': `Bearer ${Token}`,
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        };
-
-
-
-        fetch(URL, {
-            method: 'GET',
-            headers: headers,
-
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    setloader(true);
-                }
-                return response.json();
-            })
-            .then((response) => {
-                if (response.message == true) {
-                    setloader(true);
-                    setReqArray("");
-                } else {
-                    setReqArray(response);
-                    setloader(false);
-
-                }
-
-
-            })
-            .catch((error) => {
-                setloader(true);
-            });
+            if (data.message === true) {
+                dispatch(setRequestArray(data.data));
+                console.log(RequestArray);
+              
+            } else if (data.message === "Invalid Token") {
+                navToLogin();
+            } else {
+                tostMessage(data.message || "Unknown error");
+            }
+        } catch (error) {
+            console.error('Error fetching verification code:', error);
+        }
     };
 
 
@@ -270,7 +219,7 @@ export default function DashboardLandingPage() {
                 ) : (
                     <DashboardStructure
                         children1={<Children1 date={UserArray.donationLastDate} />}
-                        children2={<Children2 Data={ReqArray} />}
+                        children2={<Children2 Data={RequestArray} />}
                     ></DashboardStructure>
                 )}
 

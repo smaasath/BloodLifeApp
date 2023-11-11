@@ -8,6 +8,13 @@ import { fetchData } from '../services/FetchLogin';
 import { TextInput } from 'react-native-paper';
 import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
 import InputField from '../components/InputField';
+import LoginUser from '../services/LoginUser';
+import { tostMessage } from '../services/Validations';
+import { useSelector, useDispatch } from 'react-redux';
+import { setUserToken } from '../Redux/Action/RegisterAction';
+
+
+
 
 
 
@@ -20,55 +27,30 @@ export default function Login() {
   const [passwordshow, setpasswordshow] = useState(true);
 
 
+  const dispatch = useDispatch();
+  
 
 
 
-  const Login = () => {
-
-    var URL = "http://localhost:8081//bloodlife/Api/login.php";
-
-    var headers = {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    };
-
-    var Data = {
-      email: username,
-      password: password,
-    };
-
-    fetch(URL, {
-      method: 'POST',
-      headers: headers,
-      body: JSON.stringify(Data)
-    })
-      .then((response) => {
-        if (!response.ok) {
-          alert("Something Went Wrong !! Try Again1");
-        }
-        return response.json();
-      })
-      .then((response) => {
-        allowLog(response.message, response.Token);
 
 
-      })
-      .catch((error) => {
-        alert("Something Went Wrong !! Try Again2");
-      });
+  const Login = async() => {
+    try {
+      const data = await LoginUser(username,password);
+      if (data.message === true) {
+        storeUserSession(data.Token);
+        dispatch(setUserToken(data.Token));
+        navDash();
+      } else {
+          tostMessage(data.message);
+      }
+  } catch (error) {
+      console.error('login error', error);
+  }
+    
   };
 
 
-
-  const allowLog = (message, Token) => {
-    if (message == true) {
-      storeUserSession(Token);
-      navDash();
-
-    } else {
-      alert(message);
-    }
-  }
 
 
 
@@ -81,7 +63,6 @@ export default function Login() {
 
         })
       );
-
 
     } catch (error) {
       alert("Something Went Wrong !! Try Again")

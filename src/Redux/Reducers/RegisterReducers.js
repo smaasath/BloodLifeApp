@@ -9,7 +9,10 @@ import {
     SET_USER_EMAIL,
     SET_USER_PASSWORD,
     SET_USER_BLOODBANK,
-    SET_USER_CONFIRM_PASSWORD
+    SET_USER_CONFIRM_PASSWORD,
+    SET_USER_TOKEN,
+    SET_USER_ARRAY,
+    SET_REQUEST_ARRAY,
 } from "../Action/RegisterAction";
 
 const minimumDate = new Date();
@@ -27,6 +30,9 @@ const initialState = {
     password: '',
     bloodbank: '',
     confirmPassword: '',
+    Token: '',
+    UserArray: [],
+    RequestArray: [],
 
 }
 
@@ -55,6 +61,12 @@ function RegisterReducer(state = initialState, action) {
             return { ...state, bloodbank: action.payload };
         case SET_USER_CONFIRM_PASSWORD:
             return { ...state, confirmPassword: action.payload };
+        case SET_USER_TOKEN:
+            return { ...state, Token: action.payload };
+        case SET_USER_ARRAY:
+            return { ...state, UserArray: action.payload };
+        case SET_REQUEST_ARRAY:
+            return { ...state, RequestArray: action.payload };
         default:
             return state;
     }

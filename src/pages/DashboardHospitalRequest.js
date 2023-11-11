@@ -5,6 +5,11 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 import DashboardStructure from '../components/DashboardStructure';
 import BloodBankRequest from '../components/BloodBankRequest';
 import LoadPage from '../components/LoadPage';
+import { useSelector, useDispatch } from 'react-redux';
+import { setUserArray, setRequestArray } from '../Redux/Action/RegisterAction';
+import fetchUser from '../services/fetchUser';
+import { tostMessage } from '../services/Validations';
+import fetchReq from '../services/fetchReq';
 
 function Children2({ Data }) {
   return (
@@ -29,7 +34,7 @@ function Children2({ Data }) {
             />
           ))
         ) : (
-          <Text style={{color:'red'}}>No requests found</Text>
+          <Text style={{ color: 'red' }}>No requests found</Text>
         )}
       </View>
     </View>
@@ -37,7 +42,7 @@ function Children2({ Data }) {
 }
 
 function Children1({ status, setstatus }) {
-  
+
   return (
     <View style={{ margin: 30 }}>
       <SelectDropdown
@@ -53,8 +58,9 @@ function Children1({ status, setstatus }) {
 
 export default function DashboardHospitalRequest() {
 
-  const [Token, setToken] = useState('');
-  const [reqArray, setReqArray] = useState([]);
+  const { Token, RequestArray } = useSelector(state => state.RegisterReducer);
+  const dispatch = useDispatch();
+
   const [refreshing, setRefreshing] = useState(false);
   const [loader, setLoader] = useState(true);
   const [FilterreqArray, setFilterreqArray] = useState([]);
@@ -67,73 +73,48 @@ export default function DashboardHospitalRequest() {
   };
 
   useEffect(() => {
+
     fetchData();
-  }, [Token]);
+
+  }, []);
 
 
   useEffect(() => {
- 
+
     if (status === 'All') {
-     
-      setFilterreqArray(reqArray);
+
+      setFilterreqArray(RequestArray);
     } else {
-      const filteredData = reqArray.filter((item) => item.requestStatus === status);
+      const filteredData = RequestArray.filter((item) => item.requestStatus === status);
       setFilterreqArray(filteredData);
     }
-  }, [reqArray, status]);
+  }, [RequestArray, status]);
 
   async function fetchData() {
-    await retrieveUserSession();
-    await fetchReq();
+    setLoader(true);
+    await fetchReqest();
+    setLoader(false);
   }
 
-  async function retrieveUserSession() {
-    try {
-      const session = await EncryptedStorage.getItem('user_session');
 
-      if (session !== undefined) {
-        const parsedSession = JSON.parse(session);
-        setToken(parsedSession.Token);
+
+  const fetchReqest = async () => {
+
+    try {
+      const data = await fetchReq(Token);
+
+      if (data.message === true) {
+        dispatch(setRequestArray(data.data));
+        console.log(RequestArray);
+
+      } else if (data.message === "Invalid Token") {
+        navToLogin();
+      } else {
+        tostMessage(data.message || "Unknown error");
       }
     } catch (error) {
-      console.error('Error retrieving user session:', error);
+      console.error('Error fetching verification code:', error);
     }
-  }
-
-  const fetchReq = async () => {
-    var URL = 'http://localhost:8081/bloodlife/Api/BloodBankRequestApi.php';
-
-    var headers = {
-      'Authorization': `Bearer ${Token}`,
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    };
-
-
-
-    fetch(URL, {
-      method: 'GET',
-      headers: headers,
-    
-    })
-      .then((response) => {
-        if (!response.ok) {
-          setLoader(true);
-        }
-        return response.json();
-      })
-      .then((response) => {
-        if (response.message === false) {
-          setLoader(true);
-          setReqArray([]);
-        } else {
-          setReqArray(response);
-          setLoader(false);
-        }
-      })
-      .catch((error) => {
-        
-      });
   };
 
   return (

@@ -1,12 +1,17 @@
 import React, { useState,useEffect } from 'react';
 import { View, Text, StyleSheet,TouchableOpacity, Image, } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import EncryptedStorage from 'react-native-encrypted-storage';
+import retrieveUserSession from '../services/getToken';
+import { useSelector, useDispatch } from 'react-redux';
+import { setUserToken } from '../Redux/Action/RegisterAction';
 
 
 
 
 export default function Home() {
+
+  
+  const dispatch = useDispatch();
 
   const navigation = useNavigation();
 
@@ -20,31 +25,22 @@ export default function Home() {
   };
 
   useEffect(() => {
-    async function retrieveUserSession() {
+
+    async function getToken(){
       try {
-        const session = await EncryptedStorage.getItem("user_session");
-
-        if (session !== undefined) {
-
-          const parsedSession = JSON.parse(session);
-          if (parsedSession.Token !== undefined) {
-            navToDashboard();
-          }else {
- 
-            navToLogin();
-          }
+        const Token = await retrieveUserSession();
+        if (Token !== undefined) {
+          dispatch(setUserToken(Token));
+          navToDashboard();
         } else {
- 
-          navToLogin();
+         
         }
-      } catch (error) {
-
-
-      
-      }
+    } catch (error) {
+        console.error('Error fetching verification code:', error);
+    }
     }
 
-    retrieveUserSession();
+    getToken();
   }, []);
 
   return (

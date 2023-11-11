@@ -4,6 +4,7 @@ import DashboardStructure from '../components/DashboardStructure'
 import { useNavigation } from '@react-navigation/native';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import LoadPage from '../components/LoadPage';
+import { useSelector, useDispatch } from 'react-redux';
 
 
 
@@ -32,7 +33,6 @@ function Children2({ data }) {
 
   const navToEdit = () => {
     navigation.navigate("EditProfile");
-    console.log("ko");
   };
 
   const logout = async () => {
@@ -79,6 +79,7 @@ function Children2({ data }) {
               <Text style={styles.headingText}>Availability</Text>
             </View>
             <View style={styles.contentCon}>
+              {data.availability == "snoozed" ? (<Text style={styles.contentText}>Activate Account In BloodBank</Text>) : (
               <View style={{ ...styles.container, paddingLeft: 50, }}>
                 <Switch
                   trackColor={{ false: '#767577', true: '#96ffad' }}
@@ -88,6 +89,7 @@ function Children2({ data }) {
                   value={isEnabled}
                 />
               </View>
+              )}
             </View>
 
           </View>
@@ -239,95 +241,17 @@ function Children2({ data }) {
 
 export default function DashboardProfile() {
 
-
-  const [Token, setToken] = useState('');
-  const [UserArray, setUserArray] = useState([]);
-  const [refreshing, setRefreshing] = React.useState(false);
-  const [loader, setloader] = React.useState(true);
-
-  const onRefresh = async () => {
-    setRefreshing(true);
-    await fetchData();
-    setRefreshing(false);
-  };
-
-  useEffect(() => {
-
-    fetchData();
-
-  }, [Token]);
+  const { Token, UserArray } = useSelector(state => state.RegisterReducer);
+  const dispatch = useDispatch();
 
 
-  async function fetchData() {
-    await retrieveUserSession();
-    await fetchUser();
-
-  }
-  async function retrieveUserSession() {
-    try {
-      const session = await EncryptedStorage.getItem("user_session");
-
-      if (session !== undefined) {
-        const parsedSession = JSON.parse(session);
-        setToken(parsedSession.Token);
-
-      }
-    } catch (error) {
-      console.error("Error retrieving user session:", error);
-    }
-  }
-
-  const fetchUser = async () => {
-
-
-    var URL = "http://localhost:8081//bloodlife/Api/DonorApi.php";
-
-    var headers = {
-      'Authorization': `Bearer ${Token}`,
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    };
-
-
-    fetch(URL, {
-      method: 'GET',
-      headers: headers,
-
-    })
-      .then((response) => {
-        if (!response.ok) {
-          setloader(true);
-        }
-        return response.json();
-      })
-      .then((response) => {
-        if (response.message == false) {
-          setloader(true);
-          setUserArray("");
-        } else {
-         
-          setUserArray(response);
-          setloader(false);
-
-        }
-
-
-
-      })
-      .catch((error) => {
-        setloader(true);
-      });
-  };
-
+  
 
   return (
     <>
 
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }>
-        {loader == true ? (
+      <ScrollView>
+        {UserArray == null  ? (
           <>
             <LoadPage></LoadPage>
           </>

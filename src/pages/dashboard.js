@@ -1,88 +1,21 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
-import React, { useState, useEffect } from 'react';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { StyleSheet, View, Image } from 'react-native'
+import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import DashboardHospitalRequest from './DashboardHospitalRequest';
 import DashboardLandingPage from './DashboardLandingPage';
 import DashboradCampaign from './DashboradCampaign';
 import DashboardRanking from './DashboardRanking';
 import DashboardProfile from './DashboardProfile';
-import IMAGEDASHBOARD from '../../assets/view-dashboard.png';
-import EncryptedStorage from 'react-native-encrypted-storage';
-import getToken from '../services/getToken';
-
-
-
-
+import { useSelector} from 'react-redux';
 
 
 export default function Dashboard() {
 
   const Tab = createBottomTabNavigator();
-  const [Token, setDonorToken] = useState('');
-  const [UserArray, setUserArray] = useState([]);
-
-  useEffect(() => {
-    async function fetchData() {
-      await retrieveUserSession();
-      await fetchUser();
-    
-    }
-
-    fetchData();
-  }, [Token]);
-
-
-
-  async function retrieveUserSession() {
-    try {
-      const session = await EncryptedStorage.getItem("user_session");
-
-      if (session !== undefined) {
-        const parsedSession = JSON.parse(session);
-        setDonorToken(parsedSession.Token);
+  const { UserArray } = useSelector(state => state.RegisterReducer);
  
-       
-      }
-    } catch (error) {
-      console.error("Error retrieving user session:", error);
-    }
-  }
 
-
-  const fetchUser = async () => {
-
-
-    var URL = "http://localhost:8081//bloodlife/Api/DonorApi.php";
-
-    var headers = {
-      'Authorization': `Bearer ${Token}`,
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    };
-
-    fetch(URL, {
-      method: 'GET',
-      headers: headers,
-    })
-      .then((response) => {
-        if (!response.ok) {
-         
-        }
-        return response.json();
-      })
-      .then((response) => {
-        if (response.message == false) {
-
-        } else {
-          setUserArray(response);
-
-        }
-      })
-      .catch((error) => {
-        
-      });
-  };
+ 
 
 
   return (

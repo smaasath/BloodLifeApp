@@ -9,6 +9,9 @@ export const SET_USER_PASSWORD = 'SET_USER_PASSWORD';
 export const SET_EMAIL_CODE = 'SET_EMAIL_CODE';
 export const SET_USER_BLOODBANK = 'SET_USER_BLOODBANK';
 export const SET_USER_CONFIRM_PASSWORD = 'SET_USER_CONFIRM_PASSWORD';
+export const SET_USER_TOKEN = 'SET_USER_TOKEN';
+export const SET_USER_ARRAY = 'SET_USER_ARRAY';
+export const SET_REQUEST_ARRAY = 'SET_REQUEST_ARRAY';
 
 
 
@@ -89,3 +92,23 @@ export const setConfirmPassword = ConfirmPassword => dispatch => {
     });
 };
 
+export const setUserToken = Token => dispatch => {
+    dispatch({
+        type: SET_USER_TOKEN,
+        payload: Token,
+    });
+};
+
+export const setUserArray = UserArray => dispatch => {
+    dispatch({
+        type: SET_USER_ARRAY,
+        payload: UserArray,
+    });
+};
+
+export const setRequestArray = RequestArray => dispatch => {
+    dispatch({
+        type: SET_REQUEST_ARRAY,
+        payload: RequestArray,
+    });
+};
