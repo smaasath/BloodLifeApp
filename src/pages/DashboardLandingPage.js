@@ -5,10 +5,11 @@ import DashboardStructure from '../components/DashboardStructure';
 import BloodBankRequest from '../components/BloodBankRequest';
 import LoadPage from '../components/LoadPage';
 import { useSelector, useDispatch } from 'react-redux';
-import { setUserArray , setRequestArray} from '../Redux/Action/RegisterAction';
+import { setUserArray, setRequestArray } from '../Redux/Action/RegisterAction';
 import fetchUser from '../services/fetchUser';
 import { tostMessage } from '../services/Validations';
 import fetchReq from '../services/fetchReq';
+
 
 
 
@@ -143,8 +144,9 @@ export default function DashboardLandingPage() {
 
 
     useEffect(() => {
-
+        setloader(true);
         fetchData();
+        setloader(false);
 
     }, []);
 
@@ -169,7 +171,7 @@ export default function DashboardLandingPage() {
             } else if (data.message === "Invalid Token") {
                 navToLogin();
             } else {
-                tostMessage(data.message || "Unknown error");
+                tostMessage(data.message || "You Are Offline");
             }
         } catch (error) {
             console.error('Error fetching verification code:', error);
@@ -186,11 +188,11 @@ export default function DashboardLandingPage() {
             if (data.message === true) {
                 dispatch(setRequestArray(data.data));
                 console.log(RequestArray);
-              
+
             } else if (data.message === "Invalid Token") {
                 navToLogin();
             } else {
-                tostMessage(data.message || "Unknown error");
+                tostMessage(data.message || "You Are Offline");
             }
         } catch (error) {
             console.error('Error fetching verification code:', error);

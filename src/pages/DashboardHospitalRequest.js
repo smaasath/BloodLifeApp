@@ -7,9 +7,9 @@ import BloodBankRequest from '../components/BloodBankRequest';
 import LoadPage from '../components/LoadPage';
 import { useSelector, useDispatch } from 'react-redux';
 import { setUserArray, setRequestArray } from '../Redux/Action/RegisterAction';
-import fetchUser from '../services/fetchUser';
 import { tostMessage } from '../services/Validations';
 import fetchReq from '../services/fetchReq';
+import { useNavigation } from '@react-navigation/native';
 
 function Children2({ Data }) {
   return (
@@ -96,7 +96,14 @@ export default function DashboardHospitalRequest() {
     setLoader(false);
   }
 
+  const navigation = useNavigation();
 
+  const navToLogin = () => {
+      navigation.reset({
+          index: 0,
+          routes: [{ name: 'Login' }],
+      });
+  };
 
   const fetchReqest = async () => {
 
@@ -105,12 +112,11 @@ export default function DashboardHospitalRequest() {
 
       if (data.message === true) {
         dispatch(setRequestArray(data.data));
-        console.log(RequestArray);
 
       } else if (data.message === "Invalid Token") {
         navToLogin();
       } else {
-        tostMessage(data.message || "Unknown error");
+        tostMessage(data.message || "You Are Offline");
       }
     } catch (error) {
       console.error('Error fetching verification code:', error);

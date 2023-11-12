@@ -12,6 +12,7 @@ export const SET_USER_CONFIRM_PASSWORD = 'SET_USER_CONFIRM_PASSWORD';
 export const SET_USER_TOKEN = 'SET_USER_TOKEN';
 export const SET_USER_ARRAY = 'SET_USER_ARRAY';
 export const SET_REQUEST_ARRAY = 'SET_REQUEST_ARRAY';
+export const SET_CAMPAIGN_ARRAY = 'SET_CAMPAIGN_ARRAY';
 
 
 
@@ -110,5 +111,12 @@ export const setRequestArray = RequestArray => dispatch => {
     dispatch({
         type: SET_REQUEST_ARRAY,
         payload: RequestArray,
+    });
+};
+
+export const setCampaignArray = campaignArray => dispatch => {
+    dispatch({
+        type: SET_CAMPAIGN_ARRAY,
+        payload: campaignArray,
     });
 };

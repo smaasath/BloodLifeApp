@@ -13,6 +13,7 @@ import {
     SET_USER_TOKEN,
     SET_USER_ARRAY,
     SET_REQUEST_ARRAY,
+    SET_CAMPAIGN_ARRAY,
 } from "../Action/RegisterAction";
 
 const minimumDate = new Date();
@@ -33,6 +34,7 @@ const initialState = {
     Token: '',
     UserArray: [],
     RequestArray: [],
+    campaignArray: [],
 
 }
 
@@ -67,6 +69,8 @@ function RegisterReducer(state = initialState, action) {
             return { ...state, UserArray: action.payload };
         case SET_REQUEST_ARRAY:
             return { ...state, RequestArray: action.payload };
+        case SET_CAMPAIGN_ARRAY:
+            return { ...state, campaignArray: action.payload };
         default:
             return state;
     }

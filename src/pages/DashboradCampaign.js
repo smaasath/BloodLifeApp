@@ -4,7 +4,15 @@ import SelectDropdown from 'react-native-select-dropdown';
 import DashboardStructure from '../components/DashboardStructure';
 import LoadPage from '../components/LoadPage';
 import CampaignComponent from '../components/CampaignComponent';
-import EncryptedStorage from 'react-native-encrypted-storage';
+import fetchCamp from '../services/fetchCampaign';
+import { useSelector, useDispatch } from 'react-redux';
+import { tostMessage } from '../services/Validations';
+import { setCampaignArray } from '../Redux/Action/RegisterAction';
+import { useNavigation } from '@react-navigation/native';
+import fetchLocation from '../services/fetchLocation';
+
+
+
 
 
 function Children2({Data}) {
@@ -44,7 +52,7 @@ function Children2({Data}) {
     </>
   )
 }
-function Children1({ status, setstatus,district,setdistrict}) {
+function Children1({ setstatus,setdistrict,district}) {
   return (
     <View style={{ margin: 30, flexDirection:'row',}}>
       <View style={{flex:1,alignItems:'center'}}>
@@ -61,7 +69,7 @@ function Children1({ status, setstatus,district,setdistrict}) {
       <View style={{flex:1,alignItems:'center'}}>
        <Text>District</Text>
       <SelectDropdown
-        data={["All", "Ampara", "Anuradhapura","Batticaloa","Galle","Hambantota","Jaffna","Kandy","Kegalle","Kilinochchi","Kurunegala","Mannar","Matale","Matara","Mullaitivu","Nuwara Eliya","Polonnaruwa","Puttalam","Ratnapura","Trincomalee","Vavuniya"]}
+        data={district}
         buttonStyle={{ borderRadius: 10, width: '70%', height: 40,margin:10 }}
         defaultButtonText={["District"]}
         buttonTextStyle={{ fontSize: 14, }}
@@ -77,13 +85,17 @@ function Children1({ status, setstatus,district,setdistrict}) {
 
 
 export default function DashboradCampaign() {
-  const [Token, setToken] = useState('');
-  const [campArray, setcampArray] = useState([]);
+  
+  const { Token,campaignArray} = useSelector(state => state.RegisterReducer);
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
   const [refreshing, setRefreshing] = useState(false);
   const [loader, setLoader] = useState(true);
   const [FilterreqArray, setFilterreqArray] = useState([]);
   const [status, setstatus] = useState("All");
   const [district, setdistrict] = useState("All");
+  const [LocationArray, setLocationArray] = useState([]);
+  const [DistictArray, setDistictArray] = useState([]);
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -97,74 +109,86 @@ export default function DashboradCampaign() {
   
   }, [Token]);
 
+  useEffect(() => {
+
+    const fetchLocationData = async () => {
+      try {
+        const data = await fetchLocation();
+
+        if (data.length === 0) {
+          setLoader(true);
+        } else {
+          setLocationArray(data);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+
+      }
+    };
+
+    fetchLocationData();
+
+  }, []);
+
+  useEffect(() => {
+
+    if (LocationArray.length === 0) {
+      setLoader(true);
+    } else {
+      const districtArray = [...new Set(LocationArray.map(item => item.district))];
+      setDistictArray(districtArray);
+
+    }
+
+  }, [LocationArray]);
+  
+
 //Filter for Campaign 4
   useEffect(() => {
     if (status === 'All' && district === 'All') {
-      setFilterreqArray(campArray);
+      setFilterreqArray(campaignArray);
     } else if (status === 'All' && district != 'All') {
-      const filteredData = campArray.filter((item) => item.district === district);
+      const filteredData = campaignArray.filter((item) => item.district === district);
       setFilterreqArray(filteredData);
     }else if (status != 'All' && district === 'All') {
-      const filteredData = campArray.filter((item) => item.status === status);
+      const filteredData = campaignArray.filter((item) => item.status === status);
       setFilterreqArray(filteredData);
     }else {
-      const filteredData = campArray.filter((item) => item.status === status && item.district === district);
+      const filteredData = campaignArray.filter((item) => item.status === status && item.district === district);
       setFilterreqArray(filteredData);
     }
-  }, [campArray, status, district]);
+  }, [campaignArray, status, district]);
   
 
   async function fetchData() {
-    await retrieveUserSession();
-    await fetchReq();
+    setLoader(true);
+    await fetchCampaign();
+    setLoader(false);
   }
 
-  async function retrieveUserSession() {
-    try {
-      const session = await EncryptedStorage.getItem('user_session');
 
-      if (session !== undefined) {
-        const parsedSession = JSON.parse(session);
-        setToken(parsedSession.Token);
+  const navToLogin = () => {
+      navigation.reset({
+          index: 0,
+          routes: [{ name: 'Login' }],
+      });
+  };
+
+  const fetchCampaign = async () => {
+    try {
+      const data = await fetchCamp(Token);
+
+      if (data.message === true) {
+        dispatch(setCampaignArray(data.data));
+        
+      } else if (data.message === "Invalid Token") {
+        navToLogin();
+      } else {
+        tostMessage(data.message ||"You Are Offline");
       }
     } catch (error) {
-      console.error('Error retrieving user session:', error);
+      console.error('Error fetching verification code:', error);
     }
-  }
-
-  const fetchReq = async () => {
-    var URL = 'http://localhost:8081//bloodlife/Api/CampaignApi.php';
-
-    var headers = {
-      'Authorization': `Bearer ${Token}`,
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    };
-
-
-    fetch(URL, {
-      method: 'GET',
-      headers: headers,
-    })
-      .then((response) => {
-        if (!response.ok) {
-          setLoader(true);
-        }
-        return response.json();
-      })
-      .then((response) => {
-        if (response.message === false) {
-          setLoader(true);
-          setcampArray([]);
-        } else {
-          setcampArray(response);
-          setLoader(false);
-        }
-      })
-      .catch((error) => {
-        setLoader(true);
-       
-      });
   };
   return (
 
@@ -174,7 +198,7 @@ export default function DashboradCampaign() {
     {loader == true ? (
       <LoadPage />
     ) : (
-      <DashboardStructure children1={<Children1 status={status} setstatus={setstatus} district={district} setdistrict={setdistrict} />} children2={<Children2 Data={FilterreqArray} />}></DashboardStructure>
+      <DashboardStructure children1={<Children1 status={status} setstatus={setstatus} district={DistictArray} setdistrict={setdistrict} />} children2={<Children2 Data={FilterreqArray} />}></DashboardStructure>
     )}
   </ScrollView>
     
