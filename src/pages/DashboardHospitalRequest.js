@@ -115,8 +115,10 @@ export default function DashboardHospitalRequest() {
 
       } else if (data.message === "Invalid Token") {
         navToLogin();
+        dispatch(setRequestArray([]));
       } else {
         tostMessage(data.message || "You Are Offline");
+        dispatch(setRequestArray([]));
       }
     } catch (error) {
       console.error('Error fetching verification code:', error);

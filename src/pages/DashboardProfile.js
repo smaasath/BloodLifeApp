@@ -156,7 +156,7 @@ function Children2({ data }) {
               <Text style={styles.headingText}>Donation Last Date </Text>
             </View>
             <View style={styles.contentCon}>
-              <Text style={styles.contentText}>{data.donationLastDate}</Text>
+              <Text style={styles.contentText}>{data.donationLastDate !=null ? data.donationLastDate  : "Not set yet"}</Text>
             </View>
 
           </View>
@@ -166,7 +166,7 @@ function Children2({ data }) {
               <Text style={styles.headingText}>Blood Group</Text>
             </View>
             <View style={styles.contentCon}>
-              <Text style={styles.contentText}>{data.bloodGroup}</Text>
+              <Text style={styles.contentText}>{data.bloodGroup !=null ? data.bloodGroup : "Not set yet"}</Text>
             </View>
 
           </View>

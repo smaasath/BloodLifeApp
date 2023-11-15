@@ -66,7 +66,7 @@ function Children1({ date }) {
                         }
                         <View style={styles.break}></View><View style={styles.break}></View>
                         <Text style={{ color: 'black', fontSize: 10, fontWeight: 'bold', }}>Your Last Donation Date</Text>
-                        <Text style={{ color: 'black', fontSize: 15, fontWeight: 'bold', }}>{date}</Text>
+                        <Text style={{ color: 'black', fontSize: 15, fontWeight: 'bold', }}>{date!=null ? date : "Need to Activate the Account"}</Text>
 
                     </View>
                     <View style={styles.timeConRight}>
@@ -187,12 +187,16 @@ export default function DashboardLandingPage() {
 
             if (data.message === true) {
                 dispatch(setRequestArray(data.data));
-                console.log(RequestArray);
+                
 
             } else if (data.message === "Invalid Token") {
                 navToLogin();
+                dispatch(setRequestArray([]));
             } else {
+                dispatch(setRequestArray([]));
                 tostMessage(data.message || "You Are Offline");
+                console.log("ko")
+                
             }
         } catch (error) {
             console.error('Error fetching verification code:', error);
