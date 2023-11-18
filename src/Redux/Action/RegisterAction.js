@@ -13,6 +13,7 @@ export const SET_USER_TOKEN = 'SET_USER_TOKEN';
 export const SET_USER_ARRAY = 'SET_USER_ARRAY';
 export const SET_REQUEST_ARRAY = 'SET_REQUEST_ARRAY';
 export const SET_CAMPAIGN_ARRAY = 'SET_CAMPAIGN_ARRAY';
+export const SET_CERTIFICATE_ARRAY = 'SET_CERTIFICATE_ARRAY';
 
 
 
@@ -118,5 +119,12 @@ export const setCampaignArray = campaignArray => dispatch => {
     dispatch({
         type: SET_CAMPAIGN_ARRAY,
         payload: campaignArray,
+    });
+};
+
+export const setCertificate = certificateArray => dispatch => {
+    dispatch({
+        type: SET_CERTIFICATE_ARRAY,
+        payload: certificateArray,
     });
 };

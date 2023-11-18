@@ -14,6 +14,7 @@ import {
     SET_USER_ARRAY,
     SET_REQUEST_ARRAY,
     SET_CAMPAIGN_ARRAY,
+    SET_CERTIFICATE_ARRAY,
 } from "../Action/RegisterAction";
 
 const minimumDate = new Date();
@@ -35,6 +36,7 @@ const initialState = {
     UserArray: [],
     RequestArray: [],
     campaignArray: [],
+    certificateArray: [],
 
 }
 
@@ -71,6 +73,8 @@ function RegisterReducer(state = initialState, action) {
             return { ...state, RequestArray: action.payload };
         case SET_CAMPAIGN_ARRAY:
             return { ...state, campaignArray: action.payload };
+        case SET_CERTIFICATE_ARRAY:
+            return { ...state, certificateArray: action.payload };
         default:
             return state;
     }
