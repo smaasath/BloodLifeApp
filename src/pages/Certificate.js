@@ -5,7 +5,7 @@ import Certificatecom from '../components/CertificateCom';
 import getCertificates from '../services/getCertificates';
 import { tostMessage } from '../services/Validations';
 import { useSelector, useDispatch } from 'react-redux';
-
+import { Modal } from 'react-native';
 
 
 
@@ -22,7 +22,6 @@ export default function Certificate() {
 
 
 
-
   useEffect(() => {
 
     const fetchCertificates = async () => {
@@ -33,7 +32,7 @@ export default function Certificate() {
 
         if (data.message === true) {
           setdonation(data.data);
-          console.log(donation);
+          console.log(data);
         } else if (data.message === "Invalid Token") {
           navToLogin();
         } else {
@@ -48,24 +47,48 @@ export default function Certificate() {
     fetchCertificates();
   }, []);
 
+  const [showViewer, setShowViewer] = React.useState(false);
+  const [currentIndex, setCurrentIndex] = React.useState(0);
+
+  const openViewer = (index) => {
+    setCurrentIndex(index);
+    setShowViewer(true);
+  };
+
+  const closeViewer = () => {
+    setShowViewer(false);
+  };
+
   return (
     <>
+      <Modal visible={true} transparent={true}>
+      
+      </Modal>
       <ScrollView>
-        <View style={{ flexWrap: 'wrap', flexDirection: 'row', padding: 10 }}>
+        <View style={{ flexWrap: 'wrap', flexDirection: 'row', padding: 10, justifyContent:"center"}}>
           {donation.length > 0 ? (
             donation.map((item, index) => (
-              <Certificatecom
-                key={index} // Ensure to provide a unique key for each item in the map
-                image={item.certificate_base64}
-              >
-                {/* Additional props or components for Certificatecom */}
-              </Certificatecom>
+             
+                <Certificatecom
+                  key={index} // Ensure to provide a unique key for each item in the map
+                  item={item}
+                >
+                  {/* Additional props or components for Certificatecom */}
+                </Certificatecom>
+             
             ))
           ) : (
             <Text style={{ color: 'red' }}>No Donation found</Text>
           )}
 
         </View>
+        {showViewer && (
+          <ImageViewer
+            imageUrls={images}
+            index={currentIndex}
+            enableSwipeDown
+            onSwipeDown={closeViewer}
+          />)}
       </ScrollView>
     </>
   )

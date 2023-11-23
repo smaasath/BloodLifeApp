@@ -15,6 +15,7 @@ import {
     SET_REQUEST_ARRAY,
     SET_CAMPAIGN_ARRAY,
     SET_CERTIFICATE_ARRAY,
+    SET_AVAILABILITY,
 } from "../Action/RegisterAction";
 
 const minimumDate = new Date();
@@ -37,6 +38,7 @@ const initialState = {
     RequestArray: [],
     campaignArray: [],
     certificateArray: [],
+    availability: '',
 
 }
 
@@ -75,6 +77,8 @@ function RegisterReducer(state = initialState, action) {
             return { ...state, campaignArray: action.payload };
         case SET_CERTIFICATE_ARRAY:
             return { ...state, certificateArray: action.payload };
+        case SET_AVAILABILITY:
+            return { ...state, availability: action.payload };
         default:
             return state;
     }

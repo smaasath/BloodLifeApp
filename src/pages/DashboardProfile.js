@@ -5,6 +5,10 @@ import { useNavigation } from '@react-navigation/native';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import LoadPage from '../components/LoadPage';
 import { useSelector, useDispatch } from 'react-redux';
+import { setUserArray, setRequestArray } from '../Redux/Action/RegisterAction';
+import fetchUser from '../services/fetchUser';
+import { tostMessage } from '../services/Validations';
+import fetchReq from '../services/fetchReq';
 
 
 
@@ -30,7 +34,9 @@ function Children2({ data }) {
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
   const navigation = useNavigation();
 
-
+  const navtoMedicalRep = () => {
+    navigation.navigate("MedicalRepoer");
+  };
   const navToEdit = () => {
     navigation.navigate("EditProfile");
   };
@@ -79,17 +85,7 @@ function Children2({ data }) {
               <Text style={styles.headingText}>Availability</Text>
             </View>
             <View style={styles.contentCon}>
-              {data.availability == "snoozed" ? (<Text style={styles.contentText}>Activate Account In BloodBank</Text>) : (
-              <View style={{ ...styles.container, paddingLeft: 50, }}>
-                <Switch
-                  trackColor={{ false: '#767577', true: '#96ffad' }}
-                  thumbColor={isEnabled ? '#11f542' : '#f4f3f4'}
-                  ios_backgroundColor="#3e3e3e"
-                  onValueChange={toggleSwitch}
-                  value={isEnabled}
-                />
-              </View>
-              )}
+             <Text style={{color:"black"}}>{data.availability}</Text>
             </View>
 
           </View>
@@ -196,7 +192,7 @@ function Children2({ data }) {
             <View style={{ ...styles.contentCon, alignItems: 'flex-end',}}>
 
               <TouchableOpacity
-                
+                onPress={navtoMedicalRep}
               >
                 <Image source={require('../../assets/icons8-view-90.png')} style={{ height: 40, width: 40, borderRadius: 90, }}>
                 </Image>
@@ -243,8 +239,30 @@ export default function DashboardProfile() {
 
   const { Token, UserArray } = useSelector(state => state.RegisterReducer);
   const dispatch = useDispatch();
+  useEffect(() => {
+
+    fetchUserDetail();
+
+  }, []);
+
+  const fetchUserDetail = async () => {
 
 
+    try {
+        const data = await fetchUser(Token);
+
+        if (data.message === true) {
+            dispatch(setUserArray(data));
+        } else if (data.message === "Invalid Token") {
+            navToLogin();
+        } else {
+            tostMessage(data.message || "You Are Offline");
+        }
+    } catch (error) {
+        console.error('Error fetching verification code:', error);
+    }
+
+};
   
 
   return (

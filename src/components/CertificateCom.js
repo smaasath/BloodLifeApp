@@ -2,26 +2,47 @@
 import { Text, StyleSheet, View, Image, TouchableOpacity } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux';
 
+import React, { useState, useEffect } from 'react'
 
 
 
-export default function Certificatecom({ Title, type,date,image }) {
+
+export default function Certificatecom({ item }) {
 
     const { filtereddata } = useSelector((state) => state.RegisterReducer);
     const dispatch = useDispatch();
+    const [visible, setIsVisible] = useState(false);
 
-  
+    const images = [
+        {
+            uri: `data:image/jpeg;base64,${item.certificate_base64}`,
+        },
+    ]
 
     return (
-        <View style={styles.foodcontainer}>
- 
-            <View style={{ flex: 1 }}>
-                <Image
-                    source={{ uri: image == null ? "https://classroomclipart.com/image/static7/preview2/certificate-of-excellence-with-star-clip-art-59659.jpg" : `data:image/jpeg;base64,${image}` }}
-                    style={styles.image}
-                />
+        <>
+   
+            <View style={styles.foodcontainer}>
+                <View style={{ flexDirection: "row", flex: 3 }}>
+
+                    <Image
+                        source={{
+                            uri:
+                                !item.certificate_base64 || item.certificate_base64 === null
+                                    ? "https://classroomclipart.com/image/static7/preview2/certificate-of-excellence-with-star-clip-art-59659.jpg"
+                                    : `data:image/jpeg;base64,${item.certificate_base64}`,
+                        }}
+                        style={styles.image}
+                    />
+
+
+                </View>
+            
+
+
             </View>
-        </View>
+        </>
+
     )
 }
 
@@ -38,18 +59,16 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.23,
         shadowRadius: 2.62,
         elevation: 4,
-        flexDirection: "row",
-        width: 150,
-        height: 100,
+        width: 300,
+        height: 170,
         borderRadius: 5,
         alignItems: "center",
+        justifyContent :"center"
     },
     image: {
-        flex: 1,
-        height: null,
-        width: null,
+        width: "100%",
+        height: "100%",
         resizeMode: 'cover',
-        borderTopRightRadius: 5,
-        borderBottomRightRadius: 5,
+        borderRadius: 5,
     },
 })

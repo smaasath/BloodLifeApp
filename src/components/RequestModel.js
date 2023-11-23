@@ -4,7 +4,7 @@ import Modal from "react-native-modal";
 import { useNavigation } from '@react-navigation/native';
 
 
-function RequestModel({ isModalVisible, toggleModal, status, BloodQuntity, RequestID, RequestDate, RequestHospital, location, bloodBankName, bloodGroup }) {
+function RequestModel({ isModalVisible, toggleModal, item}) {
   const navigation = useNavigation();
   const navToQrMain = () => {
     navigation.navigate("QrMain");
@@ -27,11 +27,11 @@ function RequestModel({ isModalVisible, toggleModal, status, BloodQuntity, Reque
             <View style={{ flexDirection:"row",marginBottom: 20, marginTop: 25 }}>
 
               <View style={{ ...styles.colConHead, alignItems: 'flex-start', justifyContent: 'center' }}>
-                <Text style={styles.fisrtText}>{bloodGroup}</Text>
+                <Text style={styles.fisrtText}>{item.bloodGroup}</Text>
               </View>
 
               <View style={{ ...styles.colConContent, alignItems: 'flex-end', justifyContent: 'center' }}>
-                <Text style={{ ...styles.fisrtText, color: '#FF6565' }}>{BloodQuntity}</Text>
+                <Text style={{ ...styles.fisrtText, color: '#FF6565' }}>{item.bloodQuantity}</Text>
               </View>
 
             </View>
@@ -43,7 +43,7 @@ function RequestModel({ isModalVisible, toggleModal, status, BloodQuntity, Reque
               </View>
 
               <View style={{ ...styles.colConContent }}>
-                <Text style={{ ...styles.conText }}>{RequestID}</Text>
+                <Text style={{ ...styles.conText }}>{item.bloodBankRequestId}</Text>
               </View>
 
             </View>
@@ -56,7 +56,7 @@ function RequestModel({ isModalVisible, toggleModal, status, BloodQuntity, Reque
               </View>
 
               <View style={{ ...styles.colConContent }}>
-                <Text style={{ ...styles.conText }}>{bloodBankName}</Text>
+                <Text style={{ ...styles.conText }}>{item.bloodBankName}</Text>
               </View>
 
             </View>
@@ -69,7 +69,7 @@ function RequestModel({ isModalVisible, toggleModal, status, BloodQuntity, Reque
               </View>
 
               <View style={{ ...styles.colConContent }}>
-                <Text style={{ ...styles.conText }}>{RequestHospital}</Text>
+                <Text style={{ ...styles.conText }}>{item.hospitalName}</Text>
               </View>
 
             </View>
@@ -82,7 +82,7 @@ function RequestModel({ isModalVisible, toggleModal, status, BloodQuntity, Reque
               </View>
 
               <View style={{ ...styles.colConContent }}>
-                <Text style={{ ...styles.conText }}>{location}</Text>
+                <Text style={{ ...styles.conText }}>{item.hospitalAddress == null ? item.bloodbankAddress : item.hospitalAddress}</Text>
               </View>
 
             </View>
@@ -95,7 +95,7 @@ function RequestModel({ isModalVisible, toggleModal, status, BloodQuntity, Reque
               </View>
 
               <View style={{ ...styles.colConContent }}>
-                <Text style={{ ...styles.conText }}>{RequestDate}</Text>
+                <Text style={{ ...styles.conText }}>{item.createdDate}</Text>
               </View>
 
             </View>
@@ -108,7 +108,7 @@ function RequestModel({ isModalVisible, toggleModal, status, BloodQuntity, Reque
               </View>
 
               <View style={{ ...styles.colConContent }}>
-                <Text style={{ ...styles.conText }}>{status}</Text>
+                <Text style={{ ...styles.conText }}>{item.requestStatus}</Text>
               </View>
 
             </View>

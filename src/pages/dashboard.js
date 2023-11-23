@@ -42,13 +42,7 @@ export default function Dashboard() {
           ),
           tabBarLabel: () => null,
         }} />
-        <Tab.Screen name="DashboardRanking " component={DashboardRanking} options={{
-          headerShown: false,
-          tabBarIcon: ({ color, size, focused }) => (
-            <Image source={require('../../assets/star-box.png')} style={{ height: focused ? 40 : 30, width: focused ? 40 : 30, tintColor: focused ? '#FF6565' : 'gray', }}></Image>
-          ),
-          tabBarLabel: () => null,
-        }} />
+   
         <Tab.Screen name="DashboardProfile" component={DashboardProfile} options={{
           headerShown: false,
           tabBarIcon: ({ color, size, focused }) => (

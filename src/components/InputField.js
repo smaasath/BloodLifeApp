@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 
 
 
-export default function InputField({ url, placeholder, onChangeText, inputMode, maxLength, secureTextEntry }) {
+export default function InputField({ url, placeholder, onChangeText, inputMode, maxLength, secureTextEntry,value }) {
 
     const [passwordshow, setpasswordshow] = useState(secureTextEntry);
 
@@ -25,6 +25,7 @@ export default function InputField({ url, placeholder, onChangeText, inputMode, 
                 inputMode={inputMode}
                 maxLength={maxLength}
                 secureTextEntry={passwordshow}
+                value={value}
 
 
             >

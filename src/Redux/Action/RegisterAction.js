@@ -14,6 +14,7 @@ export const SET_USER_ARRAY = 'SET_USER_ARRAY';
 export const SET_REQUEST_ARRAY = 'SET_REQUEST_ARRAY';
 export const SET_CAMPAIGN_ARRAY = 'SET_CAMPAIGN_ARRAY';
 export const SET_CERTIFICATE_ARRAY = 'SET_CERTIFICATE_ARRAY';
+export const SET_AVAILABILITY = 'SET_AVAILABILITY';
 
 
 
@@ -126,5 +127,11 @@ export const setCertificate = certificateArray => dispatch => {
     dispatch({
         type: SET_CERTIFICATE_ARRAY,
         payload: certificateArray,
+    });
+};
+export const setAvailability = availability  => dispatch => {
+    dispatch({
+        type: SET_AVAILABILITY,
+        payload: availability,
     });
 };

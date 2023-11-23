@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import RequestModel from './RequestModel';
 
 
@@ -20,7 +20,7 @@ const setcolorbystatus = (status) => {
 
 
 
-export default function BloodBankRequest({ status, BloodQuntity, RequestID, RequestDate, RequestHospital,location,bloodBankName,bloodGroup}) {
+export default function BloodBankRequest({ item }) {
 
     const [isModalVisible, setModalVisible] = useState(false);
 
@@ -28,50 +28,43 @@ export default function BloodBankRequest({ status, BloodQuntity, RequestID, Requ
         setModalVisible(!isModalVisible);
     };
 
-    const TextColors = setcolorbystatus(status);
+    const TextColors = setcolorbystatus(item.requestStatus);
 
     return (
 
 
         <>
-            <RequestModel 
-            isModalVisible={isModalVisible} 
-            toggleModal={toggleModal} 
-            status={status}
-            BloodQuntity={BloodQuntity}
-            RequestID={RequestID}
-            RequestDate={RequestDate}
-            RequestHospital={RequestHospital}
-            location={location}
-            bloodBankName={bloodBankName}
-            bloodGroup={bloodGroup}
-            
+            <RequestModel
+                isModalVisible={isModalVisible}
+                toggleModal={toggleModal}
+                item={item}
+
             >
 
             </RequestModel>
             <TouchableOpacity
-            onPress={toggleModal}
+                onPress={toggleModal}
             >
                 <View style={styles.con}>
                     <View style={{ flexDirection: 'row', }}>
                         <View style={{ flex: 3, height: 50, justifyContent: 'center', alignItems: 'flex-start', }}>
-                            <Text style={{ color: TextColors, fontWeight: 'bold', fontSize: 30, }}>{RequestID}</Text>
+                            <Text style={{ color: TextColors, fontWeight: 'bold', fontSize: 30, }}>{"B" + item.bloodBankRequestId}</Text>
                         </View>
                         <View style={{ flex: 1, height: 50, justifyContent: 'center', alignItems: 'center', }}>
-                            <Text style={{ color: TextColors, fontWeight: 'bold', fontSize: 11, }}>{BloodQuntity}</Text>
+                            <Text style={{ color: TextColors, fontWeight: 'bold', fontSize: 11, }}>{item.bloodQuantity}</Text>
                         </View>
                     </View>
 
 
                     <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'flex-start', alignItems: 'center', }}>
-                        <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 8, }}>{RequestHospital}</Text>
+                        <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 8, }}>{item.hospitalName != null ? item.hospitalName : "Blood Bank Request"}</Text>
                     </View>
                     <View style={{ flexDirection: 'row', flex: 1, height: 50, justifyContent: 'center', alignItems: 'center', }}>
                         <View style={{ flex: 1, height: 70, justifyContent: 'center', alignItems: '', }}>
-                            <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 10, }}>{RequestDate}</Text>
+                            <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 10, }}>{item.createdDate}</Text>
                         </View>
                         <View style={{ flex: 1, height: 70, justifyContent: 'center', alignItems: 'flex-end', }}>
-                            <Text style={{ color: TextColors, fontWeight: 'bold', fontSize: 10, }}>{status}</Text>
+                            <Text style={{ color: TextColors, fontWeight: 'bold', fontSize: 10, }}>{item.requestStatus}</Text>
                         </View>
                     </View>
 

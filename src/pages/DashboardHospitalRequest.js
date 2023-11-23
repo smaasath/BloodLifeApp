@@ -22,15 +22,7 @@ function Children2({ Data }) {
           Data.map((item, index) => (
             <BloodBankRequest
               key={index}
-              status={item.requestStatus}
-              BloodType={item.bloodGroup}
-              BloodQuntity={item.bloodQuantity + 'ml'}
-              RequestID={'B' + item.bloodBankRequestId}
-              RequestDate={item.createdDate}
-              RequestHospital={item.name || 'Blood Bank Request'}
-              location={item.hospitalAddress}
-              bloodBankName={item.bloodBankName}
-              bloodGroup={item.bloodGroup}
+              item={item}
             />
           ))
         ) : (
@@ -112,6 +104,8 @@ export default function DashboardHospitalRequest() {
 
       if (data.message === true) {
         dispatch(setRequestArray(data.data));
+        console.log(RequestArray)
+        
 
       } else if (data.message === "Invalid Token") {
         navToLogin();

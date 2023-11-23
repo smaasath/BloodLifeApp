@@ -16,6 +16,8 @@ import EditProfile from './src/pages/EditProfile';
 import DonorRegister from './src/pages/DonorRegister';
 import { Provider } from 'react-redux';
 import { Store } from './src/Redux/Store';
+import MedicalRepoer from './src/pages/MedicalRepoer';
+
 
 
 
@@ -43,6 +45,7 @@ function App() {
           <Stack.Screen name="Certificate" component={Certificate} />
           <Stack.Screen name="QrMain" component={QrMain} />
           <Stack.Screen name="EditProfile" component={EditProfile} />
+          <Stack.Screen name="MedicalRepoer" component={MedicalRepoer} />
           <Stack.Screen name="DonorRegister" component={DonorRegister} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
